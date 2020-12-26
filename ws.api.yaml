@@ -1,0 +1,138 @@
+asyncapi: 2.0.0
+
+
+info:
+  title: Music10 API
+  version: 1.0.0
+  description: WebSocket Music10 API
+  contact:
+    name: Dmitry Dergunov
+    url: https://dergunov.net
+    email: dmitry@dergunov.net
+
+
+servers:
+  production:
+    url: ws.api.music.dergunov.net
+    protocol: wss
+
+
+channels:
+  game/setPlaylist:
+    subscribe:
+      message:
+        $ref: '#/components/messages/setPlaylistRequest'
+
+  game/playlist:
+    publish:
+      message:
+        $ref: '#/components/messages/playlistResponse'
+
+  game/next:
+    subscribe:
+      message:
+        $ref: '#/components/messages/empty'
+
+  game/nextTracks:
+    publish:
+      message:
+        $ref: '#/components/messages/nextTracksResponse'
+
+  game/choose:
+    subscribe:
+      message:
+        $ref: '#/components/messages/chooseRequest'
+
+  game/chooseResult:
+    publish:
+      message:
+        $ref: '#/components/messages/chooseResultResponse'
+
+components:
+  messages:
+    empty:
+      payload:
+        $ref: '#/components/schemas/Empty'
+
+    setPlaylistRequest:
+      payload:
+        type: integer
+        description: Playlist id for game
+
+    playlistResponse:
+      payload:
+        $ref: '#/components/schemas/Playlist'
+
+    nextTracksResponse:
+      payload:
+        $ref: '#/components/schemas/TracksForUser'
+
+    chooseRequest:
+      payload:
+        type: integer
+        description: Playlist id of user choose
+
+    chooseResultResponse:
+      payload:
+        $ref: '#/components/schemas/ChooseResult'
+
+
+  schemas:
+    Empty:
+      type: "object"
+
+    Playlist:
+      type: "object"
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      example:
+        id: 1
+        name: Русский рэп
+
+    TracksForUser:
+      type: "object"
+      properties:
+        tracks:
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/Track'
+          minItems: 4
+          maxItems: 4
+          description: Array with displayed files
+        mp3:
+          type: string
+          description: URL of mp3 file
+
+    Track:
+      type: 'object'
+      properties:
+        id:
+          type: integer
+        author:
+          type: string
+        name:
+          type: string
+
+    ChooseResult:
+      type: 'object'
+      properties:
+        correct:
+          type: integer
+          description: Right Track ID
+        result:
+          $ref: '#/components/schemas/Result'
+
+    Result:
+      type: 'object'
+      properties:
+        progress:
+          type: array
+          items:
+            type: boolean
+          description: Boolean array of game progress
+        isEnd:
+          type: boolean
+          description: Game ending flag

@@ -1,0 +1,78 @@
+{
+  "name": "music10-server",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Dmitry Dergunov <dmitry@dergunov.net>",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \\\"src/**/*.ts\\\" \\\"__tests__/**/*.ts\\\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "start:forever": "forever -c 'node' dist/main.js",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage --rootDir=. --roots __tests__ src --testRegex=\".*\\.(e2e-spec|spec)\\.ts$\"",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config __tests__/jest-e2e.json --detectOpenHandles --forceExit",
+    "doc": "compodoc -p tsconfig.json -s",
+    "deploy:doc": "scp -r documentation/* dergunov@dplnk.ru:~/music/web/build/dev/doc/server",
+    "deploy:coverage": "scp -r coverage/lcov-report/* dergunov@dplnk.ru:~/music/web/build/dev/coverage/server"
+  },
+  "dependencies": {
+    "@nestjs/common": "^7.6.4",
+    "@nestjs/core": "^7.6.4",
+    "@nestjs/platform-express": "^7.6.4",
+    "@nestjs/platform-socket.io": "^7.6.4",
+    "@nestjs/websockets": "^7.6.4",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^6.6.3",
+    "forever": "^3.0.4"
+  },
+  "devDependencies": {
+    "@compodoc/compodoc": "^1.1.11",
+    "@nestjs/cli": "^7.5.1",
+    "@nestjs/schematics": "^7.2.5",
+    "@nestjs/testing": "^7.6.4",
+    "@types/express": "^4.17.9",
+    "@types/jest": "^26.0.19",
+    "@types/node": "^14.14.16",
+    "@types/socket.io": "^2.1.12",
+    "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "supertest": "^6.0.1",
+    "ts-jest": "^26.4.4",
+    "ts-loader": "^8.0.12",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "testEnvironment": "node"
+  }
+}
