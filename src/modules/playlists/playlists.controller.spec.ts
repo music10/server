@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlaylistsController } from './playlists.controller';
-import { DeezerApiModule } from '../deezer-api';
+import { MusicApiModule } from '../api';
 import { PlaylistsService } from './playlists.service';
 
 describe('PlaylistsController', () => {
@@ -9,7 +9,7 @@ describe('PlaylistsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DeezerApiModule],
+      imports: [MusicApiModule],
       providers: [PlaylistsService],
       controllers: [PlaylistsController],
     }).compile();
