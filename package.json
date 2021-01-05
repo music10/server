@@ -31,8 +31,7 @@
     "@nestjs/websockets": "^7.6.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3",
-    "spotify-web-api-node": "^5.0.0"
+    "rxjs": "^6.6.3"
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.11",
