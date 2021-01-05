@@ -6,6 +6,10 @@ WORKDIR /server
 COPY . .
 
 RUN yarn
+
+ARG SPOTIFY_AUTH_TOKEN
+ENV SPOTIFY_AUTH_TOKEN=${SPOTIFY_AUTH_TOKEN}
+
 RUN yarn build
 CMD ["yarn", "start:prod"]
 
