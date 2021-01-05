@@ -7,7 +7,7 @@ export interface Playlist {
   /**
    * Playlist id
    */
-  id: number;
+  id: number | string;
 
   /**
    * Playlist name
@@ -17,5 +17,5 @@ export interface Playlist {
   /**
    * Get all tracks from this playlist
    */
-  getTracks(): Promise<Track[]>;
+  getTracks?(): Promise<Track[]>;
 }

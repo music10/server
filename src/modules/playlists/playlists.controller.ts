@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PlaylistsService } from './playlists.service';
-import { Playlist } from '../../interfaces';
 
 /**
  * Playlists REST-controller

@@ -1,5 +1,4 @@
-# Music10 Server ![Server](https://github.com/dergunovd/music10/workflows/Server/badge.svg)
-
+# Music10 Server ![Server test & publish](https://github.com/music10/server/workflows/Server%20test%20&%20publish/badge.svg)
 ### Description
 
 TODO
@@ -34,5 +33,5 @@ npm start
 ```bash
 sudo docker rm --force musiq
 sudo docker pull docker.pkg.github.com/music10/server/server:latest
-sudo docker run -p 5001:3001 -p 5000:3000 -d --name musiq docker.pkg.github.commusic10/server/server:latest
+sudo docker run -p 5001:3001 -p 5000:3000 -d --name musiq docker.pkg.github.com/music10/server/server:latest
 ```

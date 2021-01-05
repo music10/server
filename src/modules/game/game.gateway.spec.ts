@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Socket } from 'socket.io';
+
 import { GameGateway } from './game.gateway';
 import { GameService } from './game.service';
-import { PlaylistsModule } from '../playlists/playlists.module';
-import { DeezerApiModule } from '../deezer-api';
-import { Socket } from 'socket.io';
+import { PlaylistsModule } from '../playlists';
+import { MusicApiModule } from '../api';
 import { Game } from './entities/game.entity';
 import { PlaylistsService } from '../playlists/playlists.service';
-import { PLAYLIST_MOCK } from '../../../__tests__/mocks/playlist';
+import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
 
 const MOCK_SOCKET: Socket = {
   id: '123456',
@@ -22,7 +23,7 @@ describe('GameGateway', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PlaylistsModule, DeezerApiModule],
+      imports: [PlaylistsModule, MusicApiModule],
       providers: [GameGateway, GameService],
     }).compile();
 
