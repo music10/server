@@ -30,6 +30,7 @@ export class ApiService implements MusicApi {
     this.httpService.axiosRef.interceptors.response.use(
       (value) => value,
       async (error) => {
+        console.log(error);
         if (
           error.response?.data?.error?.message === 'The access token expired'
         ) {

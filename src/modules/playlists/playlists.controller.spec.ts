@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PlaylistsController } from './playlists.controller';
 import { MusicApiModule } from '../api';
 import { PlaylistsService } from './playlists.service';
+import { PLAYLIST_MOCK, PLAYLISTS_MOCK } from '../../../__tests__/mocks';
 
 describe('PlaylistsController', () => {
   let controller: PlaylistsController;
@@ -17,9 +18,15 @@ describe('PlaylistsController', () => {
     controller = module.get<PlaylistsController>(PlaylistsController);
     service = module.get<PlaylistsService>(PlaylistsService);
 
-    jest.spyOn(service, 'getPlaylists');
+    jest
+      .spyOn(service, 'getPlaylists')
+      .mockImplementation(async () => PLAYLISTS_MOCK);
     jest.spyOn(service, 'searchPlaylists');
-    jest.spyOn(service, 'getPlaylist');
+    jest
+      .spyOn(service, 'getPlaylist')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .mockImplementation(async () => PLAYLIST_MOCK);
   });
 
   it('should be defined', () => {
