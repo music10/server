@@ -1,5 +1,4 @@
-# Music10 Server ![Server](https://github.com/dergunovd/music10/workflows/Server/badge.svg)
-
+# Music10 Server ![Server test & publish](https://github.com/music10/server/workflows/Server%20test%20&%20publish/badge.svg)
 ### Description
 
 TODO

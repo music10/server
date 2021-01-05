@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlaylistsService } from './playlists.service';
-import { DeezerApiModule } from '../deezer-api';
+import { MusicApiModule } from '../api';
 
 describe('PlaylistsService', () => {
   let service: PlaylistsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DeezerApiModule],
+      imports: [MusicApiModule],
       providers: [PlaylistsService],
     }).compile();
 

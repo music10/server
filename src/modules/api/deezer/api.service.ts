@@ -1,5 +1,5 @@
 import { HttpService, Injectable } from '@nestjs/common';
-import { MusicApi, Playlist } from '../../interfaces';
+import { MusicApi } from '../../../interfaces';
 
 /**
  * Service for Deezer
@@ -7,9 +7,9 @@ import { MusicApi, Playlist } from '../../interfaces';
  * @interface MusicApi
  */
 @Injectable()
-export class DeezerApiService implements MusicApi {
+export class ApiService implements MusicApi {
   /**
-   * DeezerApiService constructor
+   * ApiService constructor
    * @param httpService
    */
   constructor(private httpService: HttpService) {}
