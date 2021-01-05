@@ -107,12 +107,14 @@ export class ApiService implements MusicApi {
     return new Promise<Track[]>((resolve) => {
       const responseHandler = ({ data }) => {
         tracks.push(
-          ...data.items.map(({ track }) => ({
-            name: track.name,
-            id: track.id,
-            author: track.artists.map((artist) => artist.name).join(', '),
-            mp3: track.preview_url,
-          })),
+          ...data.items
+            .filter(({ track }) => track.preview_url)
+            .map(({ track }) => ({
+              name: track.name,
+              id: track.id,
+              author: track.artists.map((artist) => artist.name).join(', '),
+              mp3: track.preview_url,
+            })),
         );
 
         if (data.next) {
