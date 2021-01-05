@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DeezerApiService } from './deezer-api.service';
-import { DeezerApiHttpModule } from './deezer-api.http.module';
+import { ApiService } from './api.service';
+import { ApiHttpModule } from './api.http.module';
 
 describe('DeezerApiService', () => {
-  let service: DeezerApiService;
+  let service: ApiService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DeezerApiHttpModule],
-      providers: [DeezerApiService],
+      imports: [ApiHttpModule],
+      providers: [ApiService],
     }).compile();
 
-    service = module.get<DeezerApiService>(DeezerApiService);
+    service = module.get<ApiService>(ApiService);
   });
 
   it('should be defined', () => {

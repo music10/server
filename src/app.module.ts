@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { DeezerApiModule, PlaylistsModule, GameModule } from './modules';
+import { MusicApiModule, PlaylistsModule, GameModule } from './modules';
 
 @Module({
-  imports: [PlaylistsModule, DeezerApiModule, GameModule],
+  imports: [PlaylistsModule, MusicApiModule, GameModule],
 })
 export class AppModule {}

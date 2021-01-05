@@ -20,17 +20,17 @@ export interface MusicApi {
    * Get playlist by id
    * @param playlistId
    */
-  getPlaylistById(playlistId: string): Promise<Playlist>;
+  getPlaylistById(playlistId: string | number): Promise<Playlist>;
 
   /**
    * Get tracks by playlist id
    * @param playlistId
    */
-  getTracksByPlaylistId(playlistId: string): Promise<Track[]>;
+  getTracksByPlaylistId(playlistId: string | number): Promise<Track[]>;
 
   /**
    * Get track by id
    * @param trackId
    */
-  getTrackById(trackId: string): Promise<Track>;
+  getTrackById(trackId: string | number): Promise<Track>;
 }

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GameService } from './game.service';
 import { PlaylistsModule } from '../playlists';
-import { DeezerApiModule } from '../deezer-api';
+import { MusicApiModule } from '../api';
 import { Game } from './entities/game.entity';
 
 describe('GameService', () => {
@@ -9,7 +9,7 @@ describe('GameService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PlaylistsModule, DeezerApiModule],
+      imports: [PlaylistsModule, MusicApiModule],
       providers: [GameService],
     }).compile();
 
