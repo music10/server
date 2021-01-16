@@ -67,15 +67,30 @@ export class ApiService implements MusicApi {
       .toPromise()
       .then(({ data }) => data);
   }
+
   /**
    * Search playlists by query-string
    * @param query
    * @return
    */
   async searchPlaylists(query) {
-    return (await this.getPlaylists()).filter((playlist) =>
-      new RegExp(query, 'ig').test(playlist.name),
-    );
+    return this.httpService
+      .get(`/search`, {
+        params: {
+          q: query,
+          type: 'playlist',
+        },
+      })
+      .toPromise()
+      .then(({ data }) =>
+        data.playlists.items
+          .filter((playlist) => playlist.tracks.total > 40)
+          .slice(0, 20)
+          .map(({ id, name }) => ({
+            id,
+            name,
+          })),
+      );
   }
 
   /**

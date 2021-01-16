@@ -48,16 +48,14 @@ describe('SpotifyApiService', () => {
   });
 
   it('should search playlists', async () => {
-    expect(await service.searchPlaylists('рус')).toStrictEqual([
-      {
-        id: '27f5HDjqkWIOxX7xA3T95p',
-        name: 'Русский рэп',
-      },
-      {
-        id: '3CjOptqIHEVcfNEP9GAuMz',
-        name: 'Русский Рок',
-      },
-    ]);
+    expect(await service.searchPlaylists('русский')).toEqual(
+      expect.arrayContaining([
+        {
+          id: expect.any(String),
+          name: expect.any(String),
+        },
+      ]),
+    );
   });
 
   it('should get playlist by id', async () => {
