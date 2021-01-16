@@ -33,5 +33,5 @@ npm start
 ```bash
 sudo docker rm --force musiq
 sudo docker pull docker.pkg.github.com/music10/server/server:latest
-sudo docker run -p 5001:3001 -p 5000:3000 -d --name musiq docker.pkg.github.com/music10/server/server:latest
+sudo docker run -p 5001:3001 -p 5000:3000 -d --name musiq --restart always docker.pkg.github.com/music10/server/server:latest
 ```
