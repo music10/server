@@ -4,6 +4,7 @@ import { ShareService } from './share.service';
 
 describe('ShareController', () => {
   let controller: ShareController;
+  let service: ShareService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -12,9 +13,20 @@ describe('ShareController', () => {
     }).compile();
 
     controller = module.get<ShareController>(ShareController);
+    service = module.get<ShareService>(ShareService);
+
+    jest
+      .spyOn(service, 'generatePng')
+      .mockImplementation(async () => 'data:image/png;base64,SOME_BASE64');
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('should generate base64 png', () => {
+    controller.share('Русский рэп', 8, 10);
+    expect(service.generatePng).toBeCalledTimes(1);
+    expect(service.generatePng).toBeCalledWith('Русский рэп', 8, 10);
   });
 });
