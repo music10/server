@@ -1,6 +1,5 @@
 asyncapi: 2.0.0
 
-
 info:
   title: Music10 API
   version: 1.0.0
@@ -10,12 +9,10 @@ info:
     url: https://dergunov.net
     email: dmitry@dergunov.net
 
-
 servers:
   production:
     url: ws.api.music.dergunov.net
     protocol: wss
-
 
 channels:
   game/setPlaylist:
@@ -76,13 +73,12 @@ components:
       payload:
         $ref: '#/components/schemas/ChooseResult'
 
-
   schemas:
     Empty:
-      type: "object"
+      type: 'object'
 
     Playlist:
-      type: "object"
+      type: 'object'
       properties:
         id:
           type: integer
@@ -93,7 +89,7 @@ components:
         name: Русский рэп
 
     TracksForUser:
-      type: "object"
+      type: 'object'
       properties:
         tracks:
           type: 'array'
