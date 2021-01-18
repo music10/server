@@ -39,10 +39,14 @@ jobs:
         run: npm run test
         env:
           SPOTIFY_AUTH_TOKEN: ${{ secrets.SPOTIFY_AUTH_TOKEN }}
+
       - name: e2e Test
         run: npm run test:e2e
         env:
           SPOTIFY_AUTH_TOKEN: ${{ secrets.SPOTIFY_AUTH_TOKEN }}
+
+      - name: Build Test
+        run: docker build . --file Dockerfile
     # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
