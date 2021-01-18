@@ -1,4 +1,5 @@
 # Music10 Server ![Server test & publish](https://github.com/music10/server/workflows/Server%20test%20&%20publish/badge.svg)
+
 ### Description
 
 TODO
@@ -30,6 +31,7 @@ npm start
 ```
 
 ### Deploy
+
 ```bash
 sudo docker rm --force musiq
 sudo docker pull docker.pkg.github.com/music10/server/server:latest
