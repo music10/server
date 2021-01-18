@@ -1,11 +1,25 @@
 import { Injectable } from '@nestjs/common';
 
+/**
+ * Convertor to convert svg to png/jpeg images for Node
+ * @link https://github.com/fuzhenn/node-svg2img
+ */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const svg2img = require('svg2img');
 
+/**
+ * Share Service
+ */
 @Injectable()
 export class ShareService {
-  generatePng(playlist: string, guess: number, all = 10) {
+  /**
+   * Generate png for share
+   * @param playlist - name of playlist
+   * @param guess - number of guessed tracks
+   * @param all - number of all tracks
+   * @return base64 encoded png image
+   */
+  generatePng(playlist: string, guess: number, all: number): Promise<string> {
     const CHART_OUTER_WIDTH = 1080;
     const STROKE_WIDTH = 30;
     const CHART_INNER_WIDTH = CHART_OUTER_WIDTH - 2 * STROKE_WIDTH;
@@ -22,7 +36,21 @@ export class ShareService {
       viewBox="0 0 1080 1920"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      height="1920"
+      width="1080"
     >
+      <defs>
+        <style type="text/css">
+          @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500");
+          text {
+            font-family: Montserrat, sans-serif;
+            font-weight: 500;
+            font-stretch: normal;
+            letter-spacing: normal;
+            font-style: normal;
+          }
+        </style>
+      </defs>
       <rect height="1920" width="1080" fill="${Colors.bg}"></rect>
       <text
         x="540"
@@ -55,7 +83,7 @@ export class ShareService {
       <circle
         transform="rotate(-90)"
         r="${CHART_INNER_WIDTH * 0.4}"
-        cx="${-CHART_OUTER_WIDTH / 2 - 800}"
+        cx="${-CHART_OUTER_WIDTH / 2 - 700}"
         cy="${CHART_OUTER_WIDTH / 2}"
         stroke="${Colors.main}"
         opacity="0.2"
@@ -67,7 +95,7 @@ export class ShareService {
         stroke-width="${STROKE_WIDTH}"
         stroke="${Colors.accent}"
         r="${CHART_INNER_WIDTH * 0.4}"
-        cx="${-CHART_OUTER_WIDTH / 2 - 800}"
+        cx="${-CHART_OUTER_WIDTH / 2 - 700}"
         cy="${CHART_OUTER_WIDTH / 2}"
       />
       <line
@@ -84,17 +112,22 @@ export class ShareService {
         y="1200"
         font-size="256"
         fill="${Colors.main}"
-        text-anchor="middle"
+        text-anchor="middle"       
       >
         ${guess}
       </text>
-      <text x="604" y="1408" font-size="160" fill="${Colors.main}">
+      <text
+        x="604"
+        y="1408"
+        font-size="160"
+        fill="${Colors.main}"        
+      >
         ${all}
       </text>
     </svg>`;
 
     return new Promise((resolve, reject) => {
-      svg2img(svg, { width: 1080, height: 1920 }, (error, buffer) => {
+      svg2img(svg, (error, buffer) => {
         if (error) {
           reject(error);
         }
