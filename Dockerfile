@@ -1,15 +1,8 @@
-FROM node:current-alpine3.12
+FROM node:15.5.1-buster
 
 WORKDIR /server
 
-ENV MUSL_LOCPATH=/usr/local/share/i18n/locales/musl
-RUN apk add --update --no-cache python2 pkgconfig pixman-dev cairo-dev pango-dev make g++ jpeg-dev git cmake make musl-dev gcc gettext-dev libintl
-RUN cd /tmp && git clone https://github.com/rilian-la-te/musl-locales.git
-RUN cd /tmp/musl-locales && cmake . && make && make install
-
-ENV LANG=ru_RU.UTF-8 \
-    LANGUAGE=ru_RU.UTF-8
-
+RUN apt-get update && apt-get install -y libpango*
 COPY . .
 
 RUN yarn
