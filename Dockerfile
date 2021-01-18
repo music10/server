@@ -2,7 +2,7 @@ FROM node:current-alpine3.12
 
 WORKDIR /server
 
-RUN apk add --update --no-cache python3 pkgconfig pixman && ln -sf python3 /usr/bin/python
+RUN apk add --update --no-cache python3 pkgconfig pixman-1 && ln -sf python3 /usr/bin/python
 
 # Bundle app source
 COPY . .
