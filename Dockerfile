@@ -2,6 +2,8 @@ FROM node:current-alpine3.12
 
 WORKDIR /server
 
+RUN apk add --update --no-cache python3 pkg-config && ln -sf python3 /usr/bin/python
+
 # Bundle app source
 COPY . .
 
