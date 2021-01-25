@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ShareController } from './share.controller';
 import { ShareService } from './share.service';
+import { MusicApiModule } from '../api';
 
 describe('ShareController', () => {
   let controller: ShareController;
@@ -8,6 +9,7 @@ describe('ShareController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [MusicApiModule],
       providers: [ShareService],
       controllers: [ShareController],
     }).compile();
@@ -25,8 +27,8 @@ describe('ShareController', () => {
   });
 
   it('should generate base64 png', () => {
-    controller.share('Русский рэп', 8, 10);
+    controller.share('27f5HDjqkWIOxX7xA3T95p', 3);
     expect(service.generatePng).toBeCalledTimes(1);
-    expect(service.generatePng).toBeCalledWith('Русский рэп', 8, 10);
+    expect(service.generatePng).toBeCalledWith('27f5HDjqkWIOxX7xA3T95p', 3);
   });
 });

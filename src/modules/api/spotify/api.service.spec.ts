@@ -61,6 +61,7 @@ describe('SpotifyApiService', () => {
   it('should get playlist by id', async () => {
     const result = await service.getPlaylistById('27f5HDjqkWIOxX7xA3T95p');
     expect(result).toStrictEqual({
+      cover: 'https://i.scdn.co/image/ab67706c0000bebbf88690ba7de2ca86e09281ac',
       id: '27f5HDjqkWIOxX7xA3T95p',
       name: 'Русский Рэп: Лучшее',
       getTracks: expect.any(Function),

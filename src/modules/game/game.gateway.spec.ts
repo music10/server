@@ -61,6 +61,7 @@ describe('GameGateway', () => {
     expect(game.setPlaylist).toHaveBeenCalledTimes(1);
     expect(game.setPlaylist).toHaveBeenCalledWith({
       id: 6536346784,
+      cover: 'https://avelot.ru/img/p/ru-default-large_default.jpg',
       name: 'Русский рэп',
       getTracks: expect.any(Function),
     });

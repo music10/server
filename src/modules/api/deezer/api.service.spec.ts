@@ -52,6 +52,7 @@ describe('DeezerApiService', () => {
     expect(result).toStrictEqual({
       id: 6536346784,
       name: 'Русский рэп',
+      cover: 'https://avelot.ru/img/p/ru-default-large_default.jpg',
       getTracks: expect.any(Function),
     });
     expect((await result.getTracks()).length).toBeGreaterThan(10);
