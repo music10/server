@@ -14,17 +14,15 @@ export class ShareController {
 
   /**
    * Get png for share
-   * @param playlist - playlist name
+   * @param playlist - playlist ID
    * @param guess - number of guessed tracks
-   * @param [all] - number of all tracks
    * @return base64 encoded png image
    */
   @Get()
   async share(
-    @Query('playlist') playlist: string,
+    @Query('playlistId') playlist: string,
     @Query('guess') guess: number,
-    @Query('all') all = 10,
   ): Promise<string> {
-    return await this.shareService.generatePng(playlist, guess, all);
+    return await this.shareService.generatePng(playlist, guess);
   }
 }

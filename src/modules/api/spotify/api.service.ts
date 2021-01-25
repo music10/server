@@ -1,5 +1,6 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { MusicApi, Track } from '../../../interfaces';
+import { errorObject } from 'rxjs/internal-compatibility';
 
 /**
  * Service for Spotify
@@ -101,13 +102,14 @@ export class ApiService implements MusicApi {
     return this.httpService
       .get(`/playlists/${playlistId}`, {
         params: {
-          fields: 'id,name',
+          fields: 'id,name,images',
         },
       })
       .toPromise()
       .then(({ data }) => ({
         name: data.name,
         id: data.id,
+        cover: data.images[0].url,
         getTracks: () => this.getTracksByPlaylistId(playlistId),
       }));
   }

@@ -54,6 +54,7 @@ export class ApiService implements MusicApi {
       .then((r) => ({
         id: r.data.id,
         name: r.data.title.replace(/^music10 ([-–]) /, ''),
+        cover: 'https://avelot.ru/img/p/ru-default-large_default.jpg',
         getTracks: () => this.getTracksByPlaylistId(playlistId),
       }));
   }

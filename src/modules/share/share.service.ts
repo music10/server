@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-/**
- * Convertor to convert svg to png/jpeg images for Node
- * @link https://github.com/fuzhenn/node-svg2img
- */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const svg2img = require('svg2img');
+import { Colors, HEADER_TEXT, LOGO_SVG, MAIN_TEXT, Sizes } from './variables';
+import { fabric } from './utils';
+import { ApiService } from '../api';
 
 /**
  * Share Service
@@ -13,126 +10,128 @@ const svg2img = require('svg2img');
 @Injectable()
 export class ShareService {
   /**
+   * ShareService constructor
+   * @param apiService
+   */
+  constructor(private readonly apiService: ApiService) {}
+
+  /**
    * Generate png for share
-   * @param playlist - name of playlist
+   * @param playlistId - playlist ID
    * @param guess - number of guessed tracks
-   * @param all - number of all tracks
    * @return base64 encoded png image
    */
-  generatePng(playlist: string, guess: number, all: number): Promise<string> {
-    const CHART_OUTER_WIDTH = 1080;
-    const STROKE_WIDTH = 30;
-    const CHART_INNER_WIDTH = CHART_OUTER_WIDTH - 2 * STROKE_WIDTH;
-    const CIRCUMFERENCE = CHART_INNER_WIDTH * 0.8 * Math.PI;
-    const circumferenceProgress = (guess / all) * CIRCUMFERENCE;
+  async generatePng(playlistId: string, guess: number): Promise<string> {
+    const { name, cover } = await this.apiService.getPlaylistById(playlistId);
 
-    enum Colors {
-      accent = '#94FF28',
-      bg = '#141414',
-      main = '#FCFCFC',
-    }
+    fabric.nodeCanvas.registerFont(
+      __dirname + '/assets/Montserrat-SemiBold.ttf',
+      {
+        family: 'Montserrat',
+        weight: 600,
+        style: 'normal',
+      },
+    );
+    fabric.nodeCanvas.registerFont(__dirname + '/assets/Montserrat-Bold.ttf', {
+      family: 'Montserrat',
+      weight: 700,
+      style: 'normal',
+    });
 
-    const svg = `<svg
-      viewBox="0 0 1080 1920"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      height="1920"
-      width="1080"
-    >
-      <defs>
-        <style type="text/css">
-          @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500");
-          text {
-            font-family: Montserrat, sans-serif;
-            font-weight: 500;
-            font-stretch: normal;
-            letter-spacing: normal;
-            font-style: normal;
-          }
-        </style>
-      </defs>
-      <rect height="1920" width="1080" fill="${Colors.bg}"></rect>
-      <text
-        x="540"
-        y="300"
-        font-size="60"
-        fill="${Colors.main}"
-        text-anchor="middle"
-      >
-        Сможешь набрать больше?
-      </text>
-      <text
-        x="540"
-        y="500"
-        font-size="60"
-        fill="${Colors.main}"
-        text-anchor="middle"
-      >
-        В жанре
-      </text>
-      <text
-        x="540"
-        y="600"
-        font-size="100"
-        fill="${Colors.main}"
-        text-anchor="middle"
-      >
-        ${playlist}
-      </text>
-      
-      <circle
-        transform="rotate(-90)"
-        r="${CHART_INNER_WIDTH * 0.4}"
-        cx="${-CHART_OUTER_WIDTH / 2 - 700}"
-        cy="${CHART_OUTER_WIDTH / 2}"
-        stroke="${Colors.main}"
-        opacity="0.2"
-        stroke-width="${STROKE_WIDTH}"
-      />
-      <circle
-        transform="rotate(-90)"
-        stroke-dasharray="${circumferenceProgress}px ${CIRCUMFERENCE}px"
-        stroke-width="${STROKE_WIDTH}"
-        stroke="${Colors.accent}"
-        r="${CHART_INNER_WIDTH * 0.4}"
-        cx="${-CHART_OUTER_WIDTH / 2 - 700}"
-        cy="${CHART_OUTER_WIDTH / 2}"
-      />
-      <line
-        opacity="0.5"
-        x1="385"
-        y1="1448"
-        x2="790"
-        y2="1043"
-        stroke="${Colors.main}"
-        stroke-width="7"
-      />
-      <text
-        x="428"
-        y="1200"
-        font-size="256"
-        fill="${Colors.main}"
-        text-anchor="middle"       
-      >
-        ${guess}
-      </text>
-      <text
-        x="604"
-        y="1408"
-        font-size="160"
-        fill="${Colors.main}"        
-      >
-        ${all}
-      </text>
-    </svg>`;
+    const canvas = new fabric.StaticCanvas(null, {
+      backgroundColor: Colors.bg,
+      width: Sizes.width,
+      height: Sizes.height,
+    });
 
-    return new Promise((resolve, reject) => {
-      svg2img(svg, (error, buffer) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(`data:image/png;base64,${buffer.toString('base64')}`);
+    // Big green text
+    const header = new fabric.Textbox(HEADER_TEXT[guess], {
+      left: Sizes.marginLeft, // Same margin
+      top: 150, // Absolute top
+      width: 955,
+      fill: Colors.accent,
+      fontFamily: 'Montserrat',
+      fontSize: 140,
+      lineHeight: 0.95,
+      fontStyle: 'normal',
+      fontWeight: 700,
+    });
+    canvas.add(header);
+
+    // Little white text
+    const text = new fabric.Textbox(MAIN_TEXT[guess], {
+      width: 600,
+      fill: Colors.main,
+      fontFamily: 'Montserrat',
+      fontSize: 54,
+      fontWeight: 600,
+    });
+    canvas.add(text);
+
+    // Playlist is just green text so we are just cloning
+    const playlistText = fabric.util.object.clone(text).set({
+      text: name,
+      top: 150,
+      fill: Colors.accent,
+      breakWords: true,
+    });
+
+    // Right bottom logo
+    const logo = await new Promise((resolve) => {
+      fabric.loadSVGFromString(LOGO_SVG, (objects, options) => {
+        const logo = fabric.util.groupSVGElements(objects, options);
+        logo.top = canvas.height - logo.height - 50;
+        logo.left = canvas.width - logo.width - 75;
+        resolve(logo);
       });
     });
+    canvas.add(logo);
+
+    // Forming text group staying right from the cover
+    const textGroup = new fabric.Group([text, playlistText], {
+      left: 330,
+    });
+
+    // Cover image, text and playlist grouped
+    const coverImg = await new Promise((resolve) => {
+      fabric.Image.fromURL(
+        cover,
+        (img) => {
+          img.scaleToWidth(Sizes.cover);
+          img.scaleToHeight(Sizes.cover);
+          const cover = img.set({
+            shadow: {
+              color: 'rgba(250, 250, 250, 0.1)',
+              blur: 100,
+              offsetX: 0,
+              offsetY: 50,
+            },
+            // Rounding
+            clipPath: new fabric.Rect({
+              width: Sizes.cover,
+              height: Sizes.cover,
+              top: Sizes.groupTop,
+              left: Sizes.marginLeft,
+              rx: 15, // Actually border-radius
+              ry: 15, // That too
+              absolutePositioned: true, // Absolute position is a workaround for scaling
+            }),
+          });
+          resolve(cover);
+        },
+        { crossOrigin: 'anonymous' },
+      );
+    });
+    // Grouping cover and texts
+
+    canvas.add(
+      new fabric.Group([coverImg, textGroup], {
+        top: Sizes.groupTop,
+        left: Sizes.marginLeft,
+      }),
+    );
+    canvas.renderAll();
+
+    return canvas.toDataURL('png');
   }
 }
