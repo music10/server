@@ -1,8 +1,8 @@
-import { Result } from './result.entity';
 import { Playlist, Track } from '../../../interfaces';
 import { randomSort } from '../../../utils';
 import { TracksForUser } from '../dtos/tracksForUser';
 import { ChooseResult } from '../dtos/chooseResult';
+import { Result } from './result.entity';
 
 /**
  * Class for game session

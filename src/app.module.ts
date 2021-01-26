@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import {
   GameModule,
-  MusicApiModule,
+  SpotifyModule,
   PlaylistsModule,
   ShareModule,
 } from './modules';
 
 @Module({
-  imports: [GameModule, MusicApiModule, PlaylistsModule, ShareModule],
+  imports: [GameModule, SpotifyModule, PlaylistsModule, ShareModule],
 })
 export class AppModule {}

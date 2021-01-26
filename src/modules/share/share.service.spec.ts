@@ -1,19 +1,26 @@
-import { ShareService } from './share.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { SpotifyService, SpotifyModule } from '../spotify';
+import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
+import { ShareService } from './share.service';
 import { ShareController } from './share.controller';
-import { MusicApiModule } from '../api';
 
 describe('ShareService', () => {
   let service: ShareService;
+  let apiService: SpotifyService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [MusicApiModule],
+      imports: [SpotifyModule],
       providers: [ShareService],
       controllers: [ShareController],
     }).compile();
 
     service = module.get<ShareService>(ShareService);
+    apiService = module.get<SpotifyService>(SpotifyService);
+
+    jest
+      .spyOn(apiService, 'getPlaylistById')
+      .mockImplementation(async () => PLAYLIST_MOCK);
   });
 
   it('should be defined', () => {

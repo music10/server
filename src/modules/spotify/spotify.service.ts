@@ -1,14 +1,11 @@
 import { HttpService, Injectable } from '@nestjs/common';
-import { MusicApi, Track } from '../../../interfaces';
-import { errorObject } from 'rxjs/internal-compatibility';
+import { Playlist, Track } from '../../interfaces';
 
 /**
- * Service for Spotify
- * @implements MusicApi
- * @interface MusicApi
+ * Service for Spotify Api
  */
 @Injectable()
-export class ApiService implements MusicApi {
+export class SpotifyService {
   /**
    * Token for Spotify API
    * Random value by default
@@ -61,7 +58,7 @@ export class ApiService implements MusicApi {
   /**
    * Get playlists
    */
-  async getPlaylists() {
+  async getPlaylists(): Promise<Playlist[]> {
     return this.httpService
       .get('https://music.dergunov.net/allowed-playlists.json')
       .toPromise()
@@ -73,7 +70,7 @@ export class ApiService implements MusicApi {
    * @param query
    * @return
    */
-  async searchPlaylists(query) {
+  async searchPlaylists(query): Promise<Playlist[]> {
     return this.httpService
       .get(`/search`, {
         params: {
@@ -98,7 +95,7 @@ export class ApiService implements MusicApi {
    * @param playlistId - playlist id
    * @return playlist
    */
-  async getPlaylistById(playlistId) {
+  async getPlaylistById(playlistId): Promise<Playlist> {
     return this.httpService
       .get(`/playlists/${playlistId}`, {
         params: {
@@ -118,7 +115,7 @@ export class ApiService implements MusicApi {
    * Get tracks by playlist id
    * @param playlistId - playlist id
    * @return tracks
-   */ async getTracksByPlaylistId(playlistId) {
+   */ async getTracksByPlaylistId(playlistId): Promise<Track[]> {
     const tracks = [];
     return new Promise<Track[]>((resolve) => {
       const responseHandler = ({ data }) => {
@@ -156,7 +153,7 @@ export class ApiService implements MusicApi {
    * @param trackId
    * @return track
    */
-  async getTrackById(trackId) {
+  async getTrackById(trackId): Promise<Track> {
     return this.httpService
       .get(`/tracks/${trackId}`, {
         params: {

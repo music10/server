@@ -9,8 +9,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-import { GameService } from './game.service';
 import { PlaylistsService } from '../playlists/playlists.service';
+import { GameService } from './game.service';
 
 /**
  * WebSocket Game gateway

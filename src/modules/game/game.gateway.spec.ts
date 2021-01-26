@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Socket } from 'socket.io';
 
-import { GameGateway } from './game.gateway';
-import { GameService } from './game.service';
 import { PlaylistsModule } from '../playlists';
-import { MusicApiModule } from '../api';
-import { Game } from './entities/game.entity';
+import { SpotifyModule } from '../spotify';
 import { PlaylistsService } from '../playlists/playlists.service';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
+import { Game } from './entities/game.entity';
+import { GameService } from './game.service';
+import { GameGateway } from './game.gateway';
 
 const MOCK_SOCKET: Socket = {
   id: '123456',
@@ -23,7 +23,7 @@ describe('GameGateway', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PlaylistsModule, MusicApiModule],
+      imports: [PlaylistsModule, SpotifyModule],
       providers: [GameGateway, GameService],
     }).compile();
 
@@ -61,7 +61,7 @@ describe('GameGateway', () => {
     expect(game.setPlaylist).toHaveBeenCalledTimes(1);
     expect(game.setPlaylist).toHaveBeenCalledWith({
       id: 6536346784,
-      cover: 'https://avelot.ru/img/p/ru-default-large_default.jpg',
+      cover: 'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
       name: 'Русский рэп',
       getTracks: expect.any(Function),
     });

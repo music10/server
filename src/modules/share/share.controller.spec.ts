@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { SpotifyModule } from '../spotify';
 import { ShareController } from './share.controller';
 import { ShareService } from './share.service';
-import { MusicApiModule } from '../api';
 
 describe('ShareController', () => {
   let controller: ShareController;
@@ -9,7 +9,7 @@ describe('ShareController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [MusicApiModule],
+      imports: [SpotifyModule],
       providers: [ShareService],
       controllers: [ShareController],
     }).compile();

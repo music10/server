@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
+import { SpotifyService } from '../spotify';
 import { Colors, HEADER_TEXT, LOGO_SVG, MAIN_TEXT, Sizes } from './variables';
 import { fabric } from './utils';
-import { ApiService } from '../api';
 
 /**
  * Share Service
@@ -13,7 +13,7 @@ export class ShareService {
    * ShareService constructor
    * @param apiService
    */
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private readonly apiService: SpotifyService) {}
 
   /**
    * Generate png for share
