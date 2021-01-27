@@ -3,8 +3,8 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
-import { PLAYLISTS_MOCK, PLAYLIST_MOCK } from './mocks';
 import { PlaylistsService } from '../src/modules/playlists/playlists.service';
+import { PLAYLISTS_MOCK, PLAYLIST_MOCK } from './mocks';
 
 describe('PlaylistsController (e2e)', () => {
   let app: INestApplication;

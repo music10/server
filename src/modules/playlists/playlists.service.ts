@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ApiService } from '../api';
+import { SpotifyService } from '../spotify';
 
 /**
  * Playlist service
@@ -10,7 +10,7 @@ export class PlaylistsService {
    * PlaylistsService constructor
    * @param apiService
    */
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: SpotifyService) {}
 
   /**
    * Get all playlists

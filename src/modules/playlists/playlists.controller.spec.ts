@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PlaylistsController } from './playlists.controller';
-import { MusicApiModule } from '../api';
-import { PlaylistsService } from './playlists.service';
+import { SpotifyModule } from '../spotify';
 import { PLAYLIST_MOCK, PLAYLISTS_MOCK } from '../../../__tests__/mocks';
+import { PlaylistsController } from './playlists.controller';
+import { PlaylistsService } from './playlists.service';
 
 describe('PlaylistsController', () => {
   let controller: PlaylistsController;
@@ -10,7 +10,7 @@ describe('PlaylistsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [MusicApiModule],
+      imports: [SpotifyModule],
       providers: [PlaylistsService],
       controllers: [PlaylistsController],
     }).compile();

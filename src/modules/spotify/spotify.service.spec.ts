@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ApiService } from './api.service';
-import { ApiHttpModule } from './api.http.module';
+import { SpotifyService } from './spotify.service';
+import { SpotifyHttpModule } from './spotifyHttpModule';
 
 describe('SpotifyApiService', () => {
-  let service: ApiService;
+  let service: SpotifyService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ApiHttpModule],
-      providers: [ApiService],
+      imports: [SpotifyHttpModule],
+      providers: [SpotifyService],
     }).compile();
 
-    service = module.get<ApiService>(ApiService);
+    service = module.get<SpotifyService>(SpotifyService);
   });
 
   it('should be defined', () => {
@@ -61,6 +61,7 @@ describe('SpotifyApiService', () => {
   it('should get playlist by id', async () => {
     const result = await service.getPlaylistById('27f5HDjqkWIOxX7xA3T95p');
     expect(result).toStrictEqual({
+      cover: 'https://i.scdn.co/image/ab67706c0000bebbf88690ba7de2ca86e09281ac',
       id: '27f5HDjqkWIOxX7xA3T95p',
       name: 'Русский Рэп: Лучшее',
       getTracks: expect.any(Function),

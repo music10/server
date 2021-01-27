@@ -1,5 +1,5 @@
-import { Game } from './game.entity';
 import { PLAYLIST_MOCK } from '../../../../__tests__/mocks';
+import { Game } from './game.entity';
 
 describe('Game', () => {
   let gameInstance: Game;

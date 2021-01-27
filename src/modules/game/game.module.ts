@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { PlaylistsModule } from '../playlists';
 import { GameService } from './game.service';
 import { GameGateway } from './game.gateway';
-import { PlaylistsModule } from '../playlists';
 
 @Module({
   imports: [PlaylistsModule],
