@@ -19,7 +19,7 @@ describe('SpotifyApiService', () => {
   });
 
   it('should get playlists', async () => {
-    expect(await service.getPlaylists()).toStrictEqual([
+    expect(await service.getCherryPickPlaylists()).toStrictEqual([
       {
         id: '27f5HDjqkWIOxX7xA3T95p',
         name: 'Русский рэп',
@@ -58,6 +58,10 @@ describe('SpotifyApiService', () => {
     );
   });
 
+  it('should search playlists by artist', async () => {
+    expect(await service.searchPlaylistsByArtist('Ice Cube')).toHaveLength(1);
+  });
+
   it('should get playlist by id', async () => {
     const result = await service.getPlaylistById('27f5HDjqkWIOxX7xA3T95p');
     expect(result).toStrictEqual({
@@ -75,22 +79,24 @@ describe('SpotifyApiService', () => {
     );
     expect(result.length).toBeGreaterThan(10);
     expect(result[0]).toStrictEqual({
-      author: 'Баста',
+      artist: 'Баста',
       mp3:
         'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
       id: '1xIDRR91yrYa3LvYWkOxxz',
       name: 'Моя игра',
+      album: 'Баста 1',
     });
   });
 
   it('should get track by id', async () => {
     const result = await service.getTrackById('1xIDRR91yrYa3LvYWkOxxz');
     expect(result).toStrictEqual({
-      author: 'Баста',
+      artist: 'Баста',
       mp3:
         'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
       id: '1xIDRR91yrYa3LvYWkOxxz',
       name: 'Моя игра',
+      album: 'Баста 1',
     });
   });
 });

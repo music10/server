@@ -16,8 +16,8 @@ export class PlaylistsService {
    * Get all playlists
    * @return {Playlist[]} playlists - playlists
    */
-  getPlaylists() {
-    return this.apiService.getPlaylists();
+  getCherryPickPlaylists() {
+    return this.apiService.getCherryPickPlaylists();
   }
 
   /**
@@ -27,6 +27,15 @@ export class PlaylistsService {
    */
   searchPlaylists(query) {
     return this.apiService.searchPlaylists(query);
+  }
+
+  /**
+   * Search playlists by query-string
+   * @param {string} query - query-string
+   * @return {Playlist[]} playlists - playlists
+   */
+  searchPlaylistsByArtist(query) {
+    return this.apiService.searchPlaylistsByArtist(query);
   }
 
   /**

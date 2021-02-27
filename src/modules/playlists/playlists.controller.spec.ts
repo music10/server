@@ -19,7 +19,7 @@ describe('PlaylistsController', () => {
     service = module.get<PlaylistsService>(PlaylistsService);
 
     jest
-      .spyOn(service, 'getPlaylists')
+      .spyOn(service, 'getCherryPickPlaylists')
       .mockImplementation(async () => PLAYLISTS_MOCK);
     jest.spyOn(service, 'searchPlaylists');
     jest
@@ -35,8 +35,8 @@ describe('PlaylistsController', () => {
 
   it('should get playlists', async () => {
     await controller.getPlaylists(undefined);
-    expect(service.getPlaylists).toHaveBeenCalledTimes(1);
-    expect(service.getPlaylists).toHaveBeenCalledWith();
+    expect(service.getCherryPickPlaylists).toHaveBeenCalledTimes(1);
+    expect(service.getCherryPickPlaylists).toHaveBeenCalledWith();
   });
 
   it('should get playlists with query', async () => {

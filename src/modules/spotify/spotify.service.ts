@@ -1,6 +1,8 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { Playlist, Track } from '../../interfaces';
 
+const SPOTIFY_OWNER_ID = 'spotify';
+
 /**
  * Service for Spotify Api
  */
@@ -58,7 +60,7 @@ export class SpotifyService {
   /**
    * Get playlists
    */
-  async getPlaylists(): Promise<Playlist[]> {
+  async getCherryPickPlaylists(): Promise<Playlist[]> {
     return this.httpService
       .get('https://music.dergunov.net/allowed-playlists.json')
       .toPromise()
@@ -83,9 +85,39 @@ export class SpotifyService {
         data.playlists.items
           .filter((playlist) => playlist.tracks.total > 40)
           .slice(0, 20)
-          .map(({ id, name }) => ({
+          .map(({ id, name, images }) => ({
             id,
             name,
+            cover: images[0].url,
+          })),
+      );
+  }
+
+  /**
+   * Search playlists by artist via query-string
+   * @param query
+   * @return
+   */
+  async searchPlaylistsByArtist(query): Promise<Playlist[]> {
+    return this.httpService
+      .get(`/search`, {
+        params: {
+          q: `This is ${query}`,
+          type: 'playlist',
+        },
+      })
+      .toPromise()
+      .then(({ data }) =>
+        data.playlists.items
+          .filter(
+            ({ tracks, owner }) =>
+              tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
+          )
+          .slice(0, 20)
+          .map(({ id, name, images }) => ({
+            id,
+            name,
+            cover: images[0].url,
           })),
       );
   }
@@ -99,7 +131,7 @@ export class SpotifyService {
     return this.httpService
       .get(`/playlists/${playlistId}`, {
         params: {
-          fields: 'id,name,images',
+          fields: 'id,name,images,href',
         },
       })
       .toPromise()
@@ -125,7 +157,7 @@ export class SpotifyService {
             .map(({ track }) => ({
               name: track.name,
               id: track.id,
-              author: track.artists.map((artist) => artist.name).join(', '),
+              artist: track.artists.map((artist) => artist.name).join(', '),
               mp3: track.preview_url,
             })),
         );
@@ -157,15 +189,16 @@ export class SpotifyService {
     return this.httpService
       .get(`/tracks/${trackId}`, {
         params: {
-          fields: 'id,name,artists(name),preview_url',
+          fields: 'id,name,artists(name),album(name),preview_url',
         },
       })
       .toPromise()
       .then(({ data }) => ({
-        author: data.artists.map((artist) => artist.name).join(', '),
-        mp3: data.preview_url,
-        name: data.name,
         id: data.id,
+        name: data.name,
+        album: data.album.name,
+        artist: data.artists.map((artist) => artist.name).join(', '),
+        mp3: data.preview_url,
       }));
   }
 }
