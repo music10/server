@@ -29,7 +29,8 @@ describe('Game', () => {
     expect(nextTracks.tracks[0]).toStrictEqual({
       id: expect.any(Number),
       name: expect.any(String),
-      author: expect.any(String),
+      artist: expect.any(String),
+      album: expect.any(String),
     });
   });
 

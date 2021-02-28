@@ -19,32 +19,7 @@ describe('SpotifyApiService', () => {
   });
 
   it('should get playlists', async () => {
-    expect(await service.getPlaylists()).toStrictEqual([
-      {
-        id: '27f5HDjqkWIOxX7xA3T95p',
-        name: 'Русский рэп',
-      },
-      {
-        id: '48GDjdetYhdwfWQExsS2nS',
-        name: 'Дискотека 90-х',
-      },
-      {
-        id: '5I4WLaJYpw1pPcRXwUQ9XV',
-        name: 'Топ 100',
-      },
-      {
-        id: '0wZkV8pmLGp8TtfRZSjG10',
-        name: 'TikTok Топ Россия',
-      },
-      {
-        id: '4IFSlc0bbc2BtoIzYxpRlG',
-        name: 'Хиты FM 2021',
-      },
-      {
-        id: '3CjOptqIHEVcfNEP9GAuMz',
-        name: 'Русский Рок',
-      },
-    ]);
+    expect(await service.getCherryPickPlaylists()).toMatchSnapshot();
   });
 
   it('should search playlists', async () => {
@@ -53,17 +28,22 @@ describe('SpotifyApiService', () => {
         {
           id: expect.any(String),
           name: expect.any(String),
+          cover: expect.any(String),
         },
       ]),
     );
   });
 
+  it('should search playlists by artist', async () => {
+    expect(await service.searchPlaylistsByArtist('Ice Cube')).toHaveLength(1);
+  });
+
   it('should get playlist by id', async () => {
-    const result = await service.getPlaylistById('27f5HDjqkWIOxX7xA3T95p');
+    const result = await service.getPlaylistById('37i9dQZF1DXathzFlVFFpY');
     expect(result).toStrictEqual({
-      cover: 'https://i.scdn.co/image/ab67706c0000bebbf88690ba7de2ca86e09281ac',
-      id: '27f5HDjqkWIOxX7xA3T95p',
-      name: 'Русский Рэп: Лучшее',
+      cover: 'https://i.scdn.co/image/ab67706f000000034647a679d5cc388b5c58fa13',
+      id: '37i9dQZF1DXathzFlVFFpY',
+      name: 'Хиты русского рэпа',
       getTracks: expect.any(Function),
     });
     expect((await result.getTracks()).length).toBeGreaterThan(10);
@@ -71,26 +51,28 @@ describe('SpotifyApiService', () => {
 
   it('should get tracks by playlist id', async () => {
     const result = await service.getTracksByPlaylistId(
-      '27f5HDjqkWIOxX7xA3T95p',
+      '37i9dQZF1DXathzFlVFFpY',
     );
     expect(result.length).toBeGreaterThan(10);
     expect(result[0]).toStrictEqual({
-      author: 'Баста',
+      album: 'Быль в глаза',
+      artist: 'Каста',
+      id: '5NqhAFTgPTsxhm7kDhfVCw',
       mp3:
-        'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
-      id: '1xIDRR91yrYa3LvYWkOxxz',
-      name: 'Моя игра',
+        'https://p.scdn.co/mp3-preview/8c6dca701a459b178b661aa655a488f200d4b18d?cid=6e32a60ae68b408596f337136300880c',
+      name: 'Вокруг Шум',
     });
   });
 
   it('should get track by id', async () => {
     const result = await service.getTrackById('1xIDRR91yrYa3LvYWkOxxz');
     expect(result).toStrictEqual({
-      author: 'Баста',
+      artist: 'Баста',
       mp3:
         'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
       id: '1xIDRR91yrYa3LvYWkOxxz',
       name: 'Моя игра',
+      album: 'Баста 1',
     });
   });
 });

@@ -15,9 +15,26 @@ export class PlaylistsController {
    */
   @Get()
   getPlaylists(@Query('query') query: string) {
-    return query
-      ? this.service.searchPlaylists(query)
-      : this.service.getPlaylists();
+    return this.service.searchPlaylists(query);
+  }
+
+  /**
+   * Get cherry-pick playlists
+   * @return playlists - array of playlists
+   */
+  @Get('/cherry-pick')
+  getCherryPickPlaylists() {
+    return this.service.getCherryPickPlaylists();
+  }
+
+  /**
+   * Get cherry-pick playlists
+   * @param query - query string for search playlists
+   * @return playlists - array of playlists
+   */
+  @Get('/artist')
+  getPlaylistsByArtist(@Query('query') query: string) {
+    return this.service.searchPlaylistsByArtist(query);
   }
 
   /**
@@ -28,5 +45,15 @@ export class PlaylistsController {
   @Get('/:id')
   getPlaylist(@Param('id') playlistId: string) {
     return this.service.getPlaylist(playlistId);
+  }
+
+  /**
+   * Get all or search playlists
+   * @param playlistId - playlist id
+   * @return playlists - array of playlists
+   */
+  @Get('/:id/tracks')
+  findTracksByPlaylistId(@Query('playlistId') playlistId: string) {
+    return this.service.getTracksByPlaylistId(playlistId);
   }
 }

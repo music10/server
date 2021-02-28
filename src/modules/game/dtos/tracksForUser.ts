@@ -7,7 +7,7 @@ export interface TracksForUser {
   /**
    * Tracks for display for user
    */
-  tracks: Pick<Track, 'id' | 'author' | 'name'>[];
+  tracks: Pick<Track, 'id' | 'artist' | 'name'>[];
 
   /**
    * HTTP link to mp3 file

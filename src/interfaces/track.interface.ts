@@ -13,9 +13,14 @@ export interface Track {
   name: string;
 
   /**
-   * Track author
+   * Track artist
    */
-  author: string;
+  artist: string;
+
+  /**
+   * Track album
+   */
+  album: string;
 
   /**
    * HTTP link to mp3 file

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Get, Injectable, Query } from '@nestjs/common';
 import { SpotifyService } from '../spotify';
 
 /**
@@ -16,8 +16,8 @@ export class PlaylistsService {
    * Get all playlists
    * @return {Playlist[]} playlists - playlists
    */
-  getPlaylists() {
-    return this.apiService.getPlaylists();
+  getCherryPickPlaylists() {
+    return this.apiService.getCherryPickPlaylists();
   }
 
   /**
@@ -30,11 +30,29 @@ export class PlaylistsService {
   }
 
   /**
+   * Search playlists by query-string
+   * @param {string} query - query-string
+   * @return {Playlist[]} playlists - playlists
+   */
+  searchPlaylistsByArtist(query) {
+    return this.apiService.searchPlaylistsByArtist(query);
+  }
+
+  /**
    * Get playlist by ID
    * @param {number} playlistId - playlist id
    * @return {Playlist} playlist - playlist
    */
   getPlaylist(playlistId) {
     return this.apiService.getPlaylistById(playlistId);
+  }
+
+  /**
+   * Get all or search playlists
+   * @param playlistId - playlist id
+   * @return playlists - array of playlists
+   */
+  getTracksByPlaylistId(playlistId) {
+    return this.apiService.getTracksByPlaylistId(playlistId);
   }
 }
