@@ -151,14 +151,13 @@ export class SpotifyService {
     const tracks = [];
     return new Promise<Track[]>((resolve) => {
       const responseHandler = ({ data }) => {
-        console.log(data);
         tracks.push(
           ...data.items
             .filter(({ track }) => track?.preview_url)
             .map(({ track }) => ({
               name: track.name,
               id: track.id,
-              album: data.album.name,
+              album: track.album.name,
               artist: track.artists.map((artist) => artist.name).join(', '),
               mp3: track.preview_url,
             })),
@@ -179,7 +178,7 @@ export class SpotifyService {
         .get(`/playlists/${playlistId}/tracks`, {
           params: {
             fields:
-              'next,items(track(id,artists(name),name,preview_url,album(name))',
+              'next,items(track(id,artists(name),name,preview_url,album(name)))',
           },
         })
         .toPromise()

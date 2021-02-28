@@ -55,12 +55,12 @@ describe('SpotifyApiService', () => {
     );
     expect(result.length).toBeGreaterThan(10);
     expect(result[0]).toStrictEqual({
-      artist: 'Баста',
+      album: 'Быль в глаза',
+      artist: 'Каста',
+      id: '5NqhAFTgPTsxhm7kDhfVCw',
       mp3:
-        'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
-      id: '1xIDRR91yrYa3LvYWkOxxz',
-      name: 'Моя игра',
-      album: 'Баста 1',
+        'https://p.scdn.co/mp3-preview/8c6dca701a459b178b661aa655a488f200d4b18d?cid=6e32a60ae68b408596f337136300880c',
+      name: 'Вокруг Шум',
     });
   });
 
