@@ -35,7 +35,7 @@ describe('PlaylistsController', () => {
 
   it('should get cherry pick playlists', async () => {
     await controller.getCherryPickPlaylists();
-    expect(service.getCherryPickPlaylists()).toHaveBeenCalledTimes(1);
+    expect(service.getCherryPickPlaylists).toHaveBeenCalledTimes(1);
     expect(service.getCherryPickPlaylists).toHaveBeenCalledWith();
   });
 

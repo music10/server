@@ -151,6 +151,7 @@ export class SpotifyService {
     const tracks = [];
     return new Promise<Track[]>((resolve) => {
       const responseHandler = ({ data }) => {
+        console.log(data);
         tracks.push(
           ...data.items
             .filter(({ track }) => track?.preview_url)
@@ -164,7 +165,11 @@ export class SpotifyService {
         );
 
         if (data.next) {
-          this.httpService.get(data.next).toPromise().then(responseHandler);
+          this.httpService
+            .get(data.next)
+            .toPromise()
+            .then(responseHandler)
+            .catch(console.error);
         } else {
           resolve(tracks);
         }
@@ -178,7 +183,8 @@ export class SpotifyService {
           },
         })
         .toPromise()
-        .then(responseHandler);
+        .then(responseHandler)
+        .catch(console.error);
     });
   }
 
