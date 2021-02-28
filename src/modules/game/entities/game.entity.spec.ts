@@ -30,6 +30,7 @@ describe('Game', () => {
       id: expect.any(Number),
       name: expect.any(String),
       artist: expect.any(String),
+      album: expect.any(String),
     });
   });
 

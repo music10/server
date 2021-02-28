@@ -19,32 +19,7 @@ describe('SpotifyApiService', () => {
   });
 
   it('should get playlists', async () => {
-    expect(await service.getCherryPickPlaylists()).toStrictEqual([
-      {
-        id: '27f5HDjqkWIOxX7xA3T95p',
-        name: 'Русский рэп',
-      },
-      {
-        id: '48GDjdetYhdwfWQExsS2nS',
-        name: 'Дискотека 90-х',
-      },
-      {
-        id: '5I4WLaJYpw1pPcRXwUQ9XV',
-        name: 'Топ 100',
-      },
-      {
-        id: '0wZkV8pmLGp8TtfRZSjG10',
-        name: 'TikTok Топ Россия',
-      },
-      {
-        id: '4IFSlc0bbc2BtoIzYxpRlG',
-        name: 'Хиты FM 2021',
-      },
-      {
-        id: '3CjOptqIHEVcfNEP9GAuMz',
-        name: 'Русский Рок',
-      },
-    ]);
+    expect(await service.getCherryPickPlaylists()).toMatchSnapshot();
   });
 
   it('should search playlists', async () => {
@@ -53,6 +28,7 @@ describe('SpotifyApiService', () => {
         {
           id: expect.any(String),
           name: expect.any(String),
+          cover: expect.any(String),
         },
       ]),
     );
@@ -63,11 +39,11 @@ describe('SpotifyApiService', () => {
   });
 
   it('should get playlist by id', async () => {
-    const result = await service.getPlaylistById('27f5HDjqkWIOxX7xA3T95p');
+    const result = await service.getPlaylistById('37i9dQZF1DXathzFlVFFpY');
     expect(result).toStrictEqual({
-      cover: 'https://i.scdn.co/image/ab67706c0000bebbf88690ba7de2ca86e09281ac',
-      id: '27f5HDjqkWIOxX7xA3T95p',
-      name: 'Русский Рэп: Лучшее',
+      cover: 'https://i.scdn.co/image/ab67706f000000034647a679d5cc388b5c58fa13',
+      id: '37i9dQZF1DXathzFlVFFpY',
+      name: 'Хиты русского рэпа',
       getTracks: expect.any(Function),
     });
     expect((await result.getTracks()).length).toBeGreaterThan(10);
@@ -75,7 +51,7 @@ describe('SpotifyApiService', () => {
 
   it('should get tracks by playlist id', async () => {
     const result = await service.getTracksByPlaylistId(
-      '27f5HDjqkWIOxX7xA3T95p',
+      '37i9dQZF1DXathzFlVFFpY',
     );
     expect(result.length).toBeGreaterThan(10);
     expect(result[0]).toStrictEqual({

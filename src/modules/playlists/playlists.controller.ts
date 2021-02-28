@@ -19,16 +19,6 @@ export class PlaylistsController {
   }
 
   /**
-   * Get all or search playlists
-   * @param playlistId - playlist id
-   * @return playlists - array of playlists
-   */
-  @Get('/tracks')
-  findTracksByPlaylistId(@Query('playlistId') playlistId: string) {
-    return this.service.getTracksByPlaylistId(playlistId);
-  }
-
-  /**
    * Get cherry-pick playlists
    * @return playlists - array of playlists
    */
@@ -55,5 +45,15 @@ export class PlaylistsController {
   @Get('/:id')
   getPlaylist(@Param('id') playlistId: string) {
     return this.service.getPlaylist(playlistId);
+  }
+
+  /**
+   * Get all or search playlists
+   * @param playlistId - playlist id
+   * @return playlists - array of playlists
+   */
+  @Get('/:id/tracks')
+  findTracksByPlaylistId(@Query('playlistId') playlistId: string) {
+    return this.service.getTracksByPlaylistId(playlistId);
   }
 }

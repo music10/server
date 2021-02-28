@@ -157,6 +157,7 @@ export class SpotifyService {
             .map(({ track }) => ({
               name: track.name,
               id: track.id,
+              album: data.album.name,
               artist: track.artists.map((artist) => artist.name).join(', '),
               mp3: track.preview_url,
             })),
@@ -172,7 +173,8 @@ export class SpotifyService {
       this.httpService
         .get(`/playlists/${playlistId}/tracks`, {
           params: {
-            fields: 'next,items(track(id,artists(name),name,preview_url))',
+            fields:
+              'next,items(track(id,artists(name),name,preview_url,album(name))',
           },
         })
         .toPromise()
