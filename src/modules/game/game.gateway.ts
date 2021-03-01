@@ -96,4 +96,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       await this.gameService.getClient(socket.id).choose(trackId),
     );
   }
+
+  /**
+   * Get results
+   * @param socket - client socket instance
+   */
+  @SubscribeMessage('getResult')
+  async getResult(@ConnectedSocket() socket: Socket) {
+    socket.emit(
+      'result',
+      await this.gameService.getClient(socket.id).getResult(),
+    );
+  }
 }

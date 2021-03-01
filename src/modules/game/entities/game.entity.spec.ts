@@ -44,7 +44,6 @@ describe('Game', () => {
     );
     expect(result).toEqual({
       correct: gameInstance['correctTrack'].id,
-      result: { isEnd: false, progress: [false] },
     });
   });
 });
