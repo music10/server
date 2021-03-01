@@ -37,6 +37,7 @@ describe('GameGateway', () => {
     spyOn(playlistService, 'getPlaylist').and.returnValue(PLAYLIST_MOCK);
     spyOn(game, 'setPlaylist');
     spyOn(game, 'next');
+    spyOn(game, 'getResult');
     spyOn(game, 'choose');
   });
 
@@ -60,7 +61,7 @@ describe('GameGateway', () => {
     await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
     expect(game.setPlaylist).toHaveBeenCalledTimes(1);
     expect(game.setPlaylist).toHaveBeenCalledWith({
-      id: 6536346784,
+      id: '6536346784',
       cover: 'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
       name: 'Русский рэп',
       getTracks: expect.any(Function),
@@ -77,5 +78,11 @@ describe('GameGateway', () => {
     await gateway.chooseTrack(MOCK_SOCKET, 2);
     expect(game.choose).toHaveBeenCalledTimes(1);
     expect(game.choose).toHaveBeenCalledWith(2);
+  });
+
+  it('should get result', async () => {
+    await gateway.getResult(MOCK_SOCKET);
+    expect(game.getResult).toHaveBeenCalledTimes(1);
+    expect(game.getResult).toHaveBeenCalledWith();
   });
 });

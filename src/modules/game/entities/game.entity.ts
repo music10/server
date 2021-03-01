@@ -2,6 +2,8 @@ import { Playlist, Track } from '../../../interfaces';
 import { randomSort } from '../../../utils';
 import { TracksForUser } from '../dtos/tracksForUser';
 import { ChooseResult } from '../dtos/chooseResult';
+import { ResultResult } from '../dtos/resultResult';
+import { HEADER_TEXT } from '../../share/variables';
 import { Result } from './result.entity';
 
 /**
@@ -69,7 +71,19 @@ export class Game {
    */
   choose(chooseTrackId: number): ChooseResult {
     this.result.updateProgress(chooseTrackId === this.correctTrack.id);
-    return { correct: this.correctTrack.id, result: this.result };
+    return { correct: this.correctTrack.id };
+  }
+
+  /**
+   * Get results
+   */
+  getResult(): ResultResult {
+    const guessed = this.result.progress.filter((item) => item).length;
+    return {
+      guessed,
+      playlist: this.playlist,
+      text: HEADER_TEXT[guessed],
+    };
   }
 
   /**
