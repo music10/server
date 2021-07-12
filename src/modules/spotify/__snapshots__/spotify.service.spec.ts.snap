@@ -3,32 +3,32 @@
 exports[`SpotifyApiService should get playlists 1`] = `
 Array [
   Object {
-    "cover": "https://music.dergunov.net/images/world.png",
+    "cover": "https://msq.app/images/world.png",
     "id": "5SHptL6bzOG1PmWgJxx2Ps",
     "name": "Топ по миру",
   },
   Object {
-    "cover": "https://music.dergunov.net/images/russia.png",
+    "cover": "https://msq.app/images/russia.png",
     "id": "5I4WLaJYpw1pPcRXwUQ9XV",
     "name": "Топ по России",
   },
   Object {
-    "cover": "https://music.dergunov.net/images/new.png",
+    "cover": "https://msq.app/images/new.png",
     "id": "37i9dQZF1DWYc8GECSzPrb",
     "name": "Новинки недели",
   },
   Object {
-    "cover": "https://music.dergunov.net/images/tiktok.png",
+    "cover": "https://msq.app/images/tiktok.png",
     "id": "56ra24CW6btsEQEA3UEzqD",
     "name": "Топ тик-тока",
   },
   Object {
-    "cover": "https://music.dergunov.net/images/hiphop.png",
+    "cover": "https://msq.app/images/hiphop.png",
     "id": "37i9dQZF1DX93L1kSOomqn",
     "name": "Русский хип-хоп",
   },
   Object {
-    "cover": "https://music.dergunov.net/images/rock.png",
+    "cover": "https://msq.app/images/rock.png",
     "id": "37i9dQZF1DX4uWsCu3SlsH",
     "name": "Рок сегодня",
   },

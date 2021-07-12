@@ -31,14 +31,16 @@ describe('GameGateway', () => {
     service = module.get<GameService>(GameService);
     const playlistService = module.get<PlaylistsService>(PlaylistsService);
 
-    spyOn(service, 'addClient');
-    spyOn(service, 'removeClient');
-    spyOn(service, 'getClient').and.returnValue(game);
-    spyOn(playlistService, 'getPlaylist').and.returnValue(PLAYLIST_MOCK);
-    spyOn(game, 'setPlaylist');
-    spyOn(game, 'next');
-    spyOn(game, 'getResult');
-    spyOn(game, 'choose');
+    jest.spyOn(service, 'addClient');
+    jest.spyOn(service, 'removeClient');
+    jest.spyOn(service, 'getClient').mockReturnValue(game);
+    jest
+      .spyOn(playlistService, 'getPlaylist')
+      .mockReturnValue(new Promise((resolve) => resolve(PLAYLIST_MOCK)));
+    jest.spyOn(game, 'setPlaylist');
+    jest.spyOn(game, 'next');
+    jest.spyOn(game, 'getResult');
+    jest.spyOn(game, 'choose');
   });
 
   it('should be defined', () => {
