@@ -1,4 +1,4 @@
-import { Get, Injectable, Query } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SpotifyService } from '../spotify';
 
 /**
@@ -22,11 +22,20 @@ export class PlaylistsService {
 
   /**
    * Search playlists by query-string
-   * @param {string} query - query-string
+   * @param query - query-string
    * @return {Playlist[]} playlists - playlists
    */
-  searchPlaylists(query) {
+  searchPlaylists(query: string) {
     return this.apiService.searchPlaylists(query);
+  }
+
+  /**
+   * Get artist by ID
+   * @param {number} artistId - artist id
+   * @return {Artist} artist
+   */
+  getArtist(artistId) {
+    return this.apiService.getArtistById(artistId);
   }
 
   /**
@@ -34,8 +43,15 @@ export class PlaylistsService {
    * @param {string} query - query-string
    * @return {Playlist[]} playlists - playlists
    */
-  searchPlaylistsByArtist(query) {
-    return this.apiService.searchPlaylistsByArtist(query);
+  async searchPlaylistsByArtist(query: string) {
+    const artists = await this.apiService.searchArtists(query);
+    return (
+      await Promise.all(
+        artists.map(({ name }) =>
+          this.apiService.searchPlaylistsByArtist(name),
+        ),
+      )
+    ).flat();
   }
 
   /**
@@ -49,8 +65,8 @@ export class PlaylistsService {
 
   /**
    * Get all or search playlists
-   * @param playlistId - playlist id
-   * @return playlists - array of playlists
+   * @param {string} playlistId - playlist id
+   * @return {Track[]} tracks - array of tracks
    */
   getTracksByPlaylistId(playlistId) {
     return this.apiService.getTracksByPlaylistId(playlistId);

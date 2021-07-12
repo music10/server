@@ -10,8 +10,8 @@ export class PlaylistsController {
 
   /**
    * Get all or search playlists
-   * @param query - query string for search playlists
-   * @return playlists - array of playlists
+   * @param {string} query - query string for search playlists
+   * @return {Playlist[]} playlists - array of playlists
    */
   @Get()
   getPlaylists(@Query('query') query: string) {
@@ -20,7 +20,7 @@ export class PlaylistsController {
 
   /**
    * Get cherry-pick playlists
-   * @return playlists - array of playlists
+   * @return {Playlist[]} playlists - array of playlists
    */
   @Get('/cherry-pick')
   getCherryPickPlaylists() {
@@ -29,8 +29,8 @@ export class PlaylistsController {
 
   /**
    * Get cherry-pick playlists
-   * @param query - query string for search playlists
-   * @return playlists - array of playlists
+   * @param {string} query - query string for search playlists
+   * @return {Playlist[]} playlists - array of playlists
    */
   @Get('/artist')
   getPlaylistsByArtist(@Query('query') query: string) {
@@ -39,8 +39,8 @@ export class PlaylistsController {
 
   /**
    * Get playlist by ID
-   * @param playlistId
-   * @return playlist
+   * @param {string} playlistId
+   * @return {Playlist[]} playlist
    */
   @Get('/:id')
   getPlaylist(@Param('id') playlistId: string) {
@@ -49,8 +49,8 @@ export class PlaylistsController {
 
   /**
    * Get all or search playlists
-   * @param playlistId - playlist id
-   * @return playlists - array of playlists
+   * @param {string} playlistId - playlist id
+   * @return {Playlist[]} playlists - array of playlists
    */
   @Get('/:id/tracks')
   findTracksByPlaylistId(@Query('playlistId') playlistId: string) {

@@ -6,6 +6,5 @@ export const TRACK_MOCK = {
   name: 'Вокруг шум',
   artist: 'Каста',
   album: 'Вокруг шум',
-  mp3:
-    'https://cdns-preview-3.dzcdn.net/stream/c-3cb5a745355abfc72dcf1e78cee1868b-3.mp3',
+  mp3: 'https://cdns-preview-3.dzcdn.net/stream/c-3cb5a745355abfc72dcf1e78cee1868b-3.mp3',
 };
