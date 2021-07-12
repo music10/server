@@ -34,12 +34,12 @@ describe('SpotifyApiService', () => {
     );
   });
 
-  it('should search playlists by artist', async () => {
-    expect(await service.searchPlaylistsByArtist('Ice Cube')).toHaveLength(1);
+  it('should search artists with Russian name', async () => {
+    expect(await service.searchPlaylistsByArtist('Гуф')).toHaveLength(1);
   });
 
-  it('should search playlists by artist With Russian name', async () => {
-    expect(await service.searchPlaylistsByArtist('Егор Крид')).toHaveLength(1);
+  it('should search playlists by artist', async () => {
+    expect(await service.searchPlaylistsByArtist('Ice Cube')).toHaveLength(1);
   });
 
   it('should get playlist by id', async () => {
@@ -71,7 +71,7 @@ describe('SpotifyApiService', () => {
     const result = await service.getTrackById('1xIDRR91yrYa3LvYWkOxxz');
     expect(result).toStrictEqual({
       artist: 'Баста',
-      mp3: 'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
+      mp3: 'https://p.scdn.co/mp3-preview/0539e24facf10a93655f79ab48fe24a9370f56dc?cid=6e32a60ae68b408596f337136300880c',
       id: '1xIDRR91yrYa3LvYWkOxxz',
       name: 'Моя игра',
       album: 'Баста 1',

@@ -65,7 +65,7 @@ export class SpotifyService {
    */
   async getCherryPickPlaylists(): Promise<Playlist[]> {
     return firstValueFrom(
-      this.httpService.get('https://music.dergunov.net/allowed-playlists.json'),
+      this.httpService.get('https://msq.app/cherry-pick.json'),
     ).then(({ data }) => data);
   }
 
