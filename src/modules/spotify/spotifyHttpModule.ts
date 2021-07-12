@@ -1,4 +1,4 @@
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 
 /**
  * Http module for Spotify API

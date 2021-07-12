@@ -38,6 +38,10 @@ describe('SpotifyApiService', () => {
     expect(await service.searchPlaylistsByArtist('Ice Cube')).toHaveLength(1);
   });
 
+  it('should search playlists by artist With Russian name', async () => {
+    expect(await service.searchPlaylistsByArtist('Егор Крид')).toHaveLength(1);
+  });
+
   it('should get playlist by id', async () => {
     const result = await service.getPlaylistById('37i9dQZF1DXathzFlVFFpY');
     expect(result).toStrictEqual({
@@ -58,8 +62,7 @@ describe('SpotifyApiService', () => {
       album: 'Быль в глаза',
       artist: 'Каста',
       id: '5NqhAFTgPTsxhm7kDhfVCw',
-      mp3:
-        'https://p.scdn.co/mp3-preview/8c6dca701a459b178b661aa655a488f200d4b18d?cid=6e32a60ae68b408596f337136300880c',
+      mp3: 'https://p.scdn.co/mp3-preview/8c6dca701a459b178b661aa655a488f200d4b18d?cid=6e32a60ae68b408596f337136300880c',
       name: 'Вокруг Шум',
     });
   });
@@ -68,8 +71,7 @@ describe('SpotifyApiService', () => {
     const result = await service.getTrackById('1xIDRR91yrYa3LvYWkOxxz');
     expect(result).toStrictEqual({
       artist: 'Баста',
-      mp3:
-        'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
+      mp3: 'https://p.scdn.co/mp3-preview/82baf3251c6681495a3cb5b2c9b476b4e51f2070?cid=6e32a60ae68b408596f337136300880c',
       id: '1xIDRR91yrYa3LvYWkOxxz',
       name: 'Моя игра',
       album: 'Баста 1',
