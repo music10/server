@@ -1,7 +1,7 @@
 /**
- * Artist interface
+ * Artist DTO
  */
-export interface Artist {
+export class ArtistDto {
   /**
    * Playlist id
    */

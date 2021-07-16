@@ -17,9 +17,9 @@ export class ShareService {
 
   /**
    * Generate png for share
-   * @param playlistId - playlist ID
-   * @param guess - number of guessed tracks
-   * @return base64 encoded png image
+   * @param {string} playlistId - playlist ID
+   * @param {number} guess - number of guessed tracks
+   * @return {string} base64 encoded png image
    */
   async generatePng(playlistId: string, guess: number): Promise<string> {
     const { name, cover } = await this.apiService.getPlaylistById(playlistId);
@@ -68,7 +68,7 @@ export class ShareService {
     });
     canvas.add(text);
 
-    // Playlist is just green text so we are just cloning
+    // PlaylistDto is just green text so we are just cloning
     const playlistText = fabric.util.object.clone(text).set({
       text: name,
       top: 150,

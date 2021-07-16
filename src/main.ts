@@ -12,7 +12,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Musiq')
     .setDescription('API for Musiq')
-    .setVersion('1.2')
+    .setVersion('1.3')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

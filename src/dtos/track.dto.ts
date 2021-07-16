@@ -1,7 +1,7 @@
 /**
- * Track interface
+ * Track DTO
  */
-export interface Track {
+export class TrackDto {
   /**
    * Track id
    */
