@@ -34,12 +34,16 @@ describe('SpotifyApiService', () => {
     );
   });
 
-  it('should search artists with Russian name', async () => {
+  it('should search playlists by artist with Russian name', async () => {
     expect(await service.searchPlaylistsByArtist('Гуф')).toHaveLength(1);
   });
 
   it('should search playlists by artist', async () => {
     expect(await service.searchPlaylistsByArtist('Ice Cube')).toHaveLength(1);
+  });
+
+  it('should search playlists by artist only one', async () => {
+    expect(await service.searchPlaylistsByArtist('Eminem')).toHaveLength(1);
   });
 
   it('should get playlist by id', async () => {

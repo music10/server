@@ -1,13 +1,13 @@
-import { Track } from './track.interface';
+import { TrackDto } from './track.dto';
 
 /**
- * Playlist interface
+ * Playlist DTO
  */
-export interface Playlist {
+export class PlaylistDto {
   /**
    * Playlist id
    */
-  id: number | string;
+  id: string;
 
   /**
    * Playlist name
@@ -22,5 +22,5 @@ export interface Playlist {
   /**
    * Get all tracks from this playlist
    */
-  getTracks?(): Promise<Track[]>;
+  getTracks?(): Promise<TrackDto[]>;
 }

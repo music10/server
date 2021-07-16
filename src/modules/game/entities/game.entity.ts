@@ -1,4 +1,4 @@
-import { Playlist, Track } from '../../../interfaces';
+import { PlaylistDto, TrackDto } from '../../../dtos';
 import { randomSort } from '../../../utils';
 import { TracksForUser } from '../dtos/tracksForUser';
 import { ChooseResult } from '../dtos/chooseResult';
@@ -18,31 +18,31 @@ export class Game {
   /**
    * Current displayed tracks for user
    */
-  displayedTracks: Track[];
+  displayedTracks: TrackDto[];
 
   /**
    * Correct track id
    * @private
    */
-  private correctTrack: Track;
+  private correctTrack: TrackDto;
 
   /**
    * Current playlist
    * @private
    */
-  private playlist: Playlist;
+  private playlist: PlaylistDto;
 
   /**
    * Tracks array for this game session
    * @private
    */
-  private tracks: Track[] = [];
+  private tracks: TrackDto[] = [];
 
   /**
    * Set playlist for this game session
    * @param playlist
    */
-  setPlaylist(playlist: Playlist): Playlist {
+  setPlaylist(playlist: PlaylistDto): PlaylistDto {
     this.playlist = playlist;
     this.result = new Result();
     return playlist;

@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SpotifyModule } from '../spotify';
-import { PLAYLIST_MOCK, PLAYLISTS_MOCK } from '../../../__tests__/mocks';
+import {
+  PLAYLIST_MOCK,
+  PLAYLISTS_MOCK,
+  TRACKS_MOCK,
+} from '../../../__tests__/mocks';
 import { PlaylistsController } from './playlists.controller';
 import { PlaylistsService } from './playlists.service';
 
@@ -21,11 +25,17 @@ describe('PlaylistsController', () => {
     jest
       .spyOn(service, 'getCherryPickPlaylists')
       .mockImplementation(async () => PLAYLISTS_MOCK);
-    jest.spyOn(service, 'searchPlaylists');
+    jest
+      .spyOn(service, 'searchPlaylists')
+      .mockImplementation(async () => PLAYLISTS_MOCK);
+    jest
+      .spyOn(service, 'searchPlaylistsByArtist')
+      .mockImplementation(async () => PLAYLISTS_MOCK);
+    jest
+      .spyOn(service, 'getTracksByPlaylistId')
+      .mockImplementation(async () => TRACKS_MOCK);
     jest
       .spyOn(service, 'getPlaylist')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       .mockImplementation(async () => PLAYLIST_MOCK);
   });
 
@@ -45,9 +55,21 @@ describe('PlaylistsController', () => {
     expect(service.searchPlaylists).toHaveBeenCalledWith('рус');
   });
 
+  it('should get playlists by artists', async () => {
+    await controller.getPlaylistsByArtist('eminem');
+    expect(service.searchPlaylistsByArtist).toHaveBeenCalledTimes(1);
+    expect(service.searchPlaylistsByArtist).toHaveBeenCalledWith('eminem');
+  });
+
   it('should get playlist', async () => {
     await controller.getPlaylist('123');
     expect(service.getPlaylist).toHaveBeenCalledTimes(1);
     expect(service.getPlaylist).toHaveBeenCalledWith('123');
+  });
+
+  it('should find tracks by playlist id', async () => {
+    await controller.findTracksByPlaylistId('123');
+    expect(service.getTracksByPlaylistId).toHaveBeenCalledTimes(1);
+    expect(service.getTracksByPlaylistId).toHaveBeenCalledWith('123');
   });
 });

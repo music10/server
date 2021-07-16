@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { Artist, Playlist, Track } from '../../interfaces';
+import { ArtistDto, PlaylistDto, TrackDto } from '../../dtos';
 
 const SPOTIFY_OWNER_ID = 'spotify';
 
@@ -63,7 +63,7 @@ export class SpotifyService {
   /**
    * Get playlists
    */
-  async getCherryPickPlaylists(): Promise<Playlist[]> {
+  async getCherryPickPlaylists(): Promise<PlaylistDto[]> {
     return firstValueFrom(
       this.httpService.get('https://msq.app/cherry-pick.json'),
     ).then(({ data }) => data);
@@ -71,10 +71,10 @@ export class SpotifyService {
 
   /**
    * Search playlists by query-string
-   * @param query
-   * @return
+   * @param {string} query
+   * @return {PlaylistDto[]} playlists
    */
-  async searchPlaylists(query): Promise<Playlist[]> {
+  async searchPlaylists(query: string): Promise<PlaylistDto[]> {
     return firstValueFrom(
       this.httpService.get(`/search`, {
         params: {
@@ -97,9 +97,9 @@ export class SpotifyService {
   /**
    * Search artists by query-string
    * @param {string} query
-   * @return
+   * @return {ArtistDto[]} artists
    */
-  async searchArtists(query: string): Promise<Artist[]> {
+  async searchArtists(query: string): Promise<ArtistDto[]> {
     return firstValueFrom(
       this.httpService.get(`/search`, {
         headers: {
@@ -120,10 +120,10 @@ export class SpotifyService {
 
   /**
    * Search playlists by artist via query-string
-   * @param query
-   * @return
+   * @param {string} query
+   * @return {PlaylistDto[]} playlists
    */
-  async searchPlaylistsByArtist(query: string): Promise<Playlist[]> {
+  async searchPlaylistsByArtist(query: string): Promise<PlaylistDto[]> {
     return firstValueFrom(
       this.httpService.get(`/search`, {
         params: {
@@ -148,10 +148,10 @@ export class SpotifyService {
 
   /**
    * Get playlist by id
-   * @param playlistId - playlist id
-   * @return playlist
+   * @param {string} playlistId - playlist id
+   * @return {PlaylistDto} playlist
    */
-  async getPlaylistById(playlistId): Promise<Playlist> {
+  async getPlaylistById(playlistId: string): Promise<PlaylistDto> {
     return firstValueFrom(
       this.httpService.get(`/playlists/${playlistId}`, {
         params: {
@@ -168,10 +168,10 @@ export class SpotifyService {
 
   /**
    * Get artist by id
-   * @param artistId - playlist id
-   * @return artist
+   * @param {string} artistId - playlist id
+   * @return {ArtistDto} artist
    */
-  async getArtistById(artistId): Promise<Artist> {
+  async getArtistById(artistId: string): Promise<ArtistDto> {
     return firstValueFrom(
       this.httpService.get(`/artists/${artistId}`, {
         headers: {
@@ -189,11 +189,11 @@ export class SpotifyService {
 
   /**
    * Get tracks by playlist id
-   * @param playlistId - playlist id
-   * @return tracks
-   */ async getTracksByPlaylistId(playlistId): Promise<Track[]> {
+   * @param {string} playlistId - playlist id
+   * @return {TrackDto[]} tracks
+   */ async getTracksByPlaylistId(playlistId: string): Promise<TrackDto[]> {
     const tracks = [];
-    return new Promise<Track[]>((resolve) => {
+    return new Promise<TrackDto[]>((resolve) => {
       const responseHandler = ({ data }) => {
         tracks.push(
           ...data.items
@@ -231,10 +231,10 @@ export class SpotifyService {
 
   /**
    * Get track by id
-   * @param trackId
-   * @return track
+   * @param {string} trackId
+   * @return {TrackDto} track
    */
-  async getTrackById(trackId): Promise<Track> {
+  async getTrackById(trackId: string): Promise<TrackDto> {
     return firstValueFrom(
       this.httpService.get(`/tracks/${trackId}`, {
         params: {

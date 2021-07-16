@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SpotifyService } from '../spotify';
 
 /**
- * Playlist service
+ * PlaylistDto service
  */
 @Injectable()
 export class PlaylistsService {
@@ -14,7 +14,7 @@ export class PlaylistsService {
 
   /**
    * Get all playlists
-   * @return {Playlist[]} playlists - playlists
+   * @return {PlaylistDto[]} playlists - playlists
    */
   getCherryPickPlaylists() {
     return this.apiService.getCherryPickPlaylists();
@@ -23,7 +23,7 @@ export class PlaylistsService {
   /**
    * Search playlists by query-string
    * @param query - query-string
-   * @return {Playlist[]} playlists - playlists
+   * @return {PlaylistDto[]} playlists - playlists
    */
   searchPlaylists(query: string) {
     return this.apiService.searchPlaylists(query);
@@ -32,43 +32,59 @@ export class PlaylistsService {
   /**
    * Get artist by ID
    * @param {number} artistId - artist id
-   * @return {Artist} artist
+   * @return {ArtistDto} artist
    */
-  getArtist(artistId) {
+  getArtist(artistId: string) {
     return this.apiService.getArtistById(artistId);
   }
 
   /**
    * Search playlists by query-string
    * @param {string} query - query-string
-   * @return {Playlist[]} playlists - playlists
+   * @return {PlaylistDto[]} playlists - playlists
    */
   async searchPlaylistsByArtist(query: string) {
     const artists = await this.apiService.searchArtists(query);
-    return (
+    const uniqueIds = new Set();
+    const playlists = [];
+    const ret = (
       await Promise.all(
-        artists.map(({ name }) =>
-          this.apiService.searchPlaylistsByArtist(name),
-        ),
+        artists.map(({ name }) => {
+          return this.apiService.searchPlaylistsByArtist(name);
+        }),
       )
     ).flat();
+
+    ret.forEach((playlist) => {
+      if (!uniqueIds.has(playlist.id)) {
+        uniqueIds.add(playlist.id);
+        playlists.push(playlist);
+      }
+    });
+
+    return playlists;
   }
 
   /**
    * Get playlist by ID
    * @param {number} playlistId - playlist id
-   * @return {Playlist} playlist - playlist
+   * @return {PlaylistDto} playlist - playlist
    */
-  getPlaylist(playlistId) {
+  getPlaylist(playlistId: string) {
     return this.apiService.getPlaylistById(playlistId);
   }
 
   /**
    * Get all or search playlists
    * @param {string} playlistId - playlist id
-   * @return {Track[]} tracks - array of tracks
+   * @return {TrackDto[]} tracks - array of tracks
    */
-  getTracksByPlaylistId(playlistId) {
-    return this.apiService.getTracksByPlaylistId(playlistId);
+  async getTracksByPlaylistId(playlistId: string) {
+    const tracks = await this.apiService.getTracksByPlaylistId(playlistId);
+    if(tracks.length < 4) {
+      throw new BadRequestException()
+    }
+    return tracks;
+    
   }
 }
