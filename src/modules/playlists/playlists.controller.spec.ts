@@ -62,14 +62,14 @@ describe('PlaylistsController', () => {
   });
 
   it('should get playlist', async () => {
-    await controller.getPlaylist('123');
+    await controller.getPlaylist('playlistId1');
     expect(service.getPlaylist).toHaveBeenCalledTimes(1);
-    expect(service.getPlaylist).toHaveBeenCalledWith('123');
+    expect(service.getPlaylist).toHaveBeenCalledWith('playlistId1');
   });
 
   it('should find tracks by playlist id', async () => {
-    await controller.findTracksByPlaylistId('123');
+    await controller.findTracksByPlaylistId('playlistId1');
     expect(service.getTracksByPlaylistId).toHaveBeenCalledTimes(1);
-    expect(service.getTracksByPlaylistId).toHaveBeenCalledWith('123');
+    expect(service.getTracksByPlaylistId).toHaveBeenCalledWith('playlistId1');
   });
 });

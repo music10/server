@@ -66,7 +66,6 @@ describe('GameGateway', () => {
       id: '6536346784',
       cover: 'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
       name: 'Русский рэп',
-      getTracks: expect.any(Function),
     });
   });
 
@@ -77,9 +76,9 @@ describe('GameGateway', () => {
   });
 
   it('should choose', async () => {
-    await gateway.chooseTrack(MOCK_SOCKET, 2);
+    await gateway.chooseTrack(MOCK_SOCKET, 'trackId1');
     expect(game.choose).toHaveBeenCalledTimes(1);
-    expect(game.choose).toHaveBeenCalledWith(2);
+    expect(game.choose).toHaveBeenCalledWith('trackId');
   });
 
   it('should get result', async () => {

@@ -65,7 +65,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const playlist = await this.playlistsService.getPlaylist(playlistId);
     socket.emit(
       'playlist',
-      await this.gameService.getClient(socket.id).setPlaylist(playlist),
+      await this.gameService
+        .getClient(socket.id)
+        .setPlaylist(playlist, () =>
+          this.playlistsService.getTracksByPlaylistId(playlistId),
+        ),
     );
   }
 
@@ -89,7 +93,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('choose')
   async chooseTrack(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() trackId: number,
+    @MessageBody() trackId: string,
   ) {
     socket.emit(
       'chooseResult',

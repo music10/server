@@ -81,10 +81,9 @@ export class PlaylistsService {
    */
   async getTracksByPlaylistId(playlistId: string) {
     const tracks = await this.apiService.getTracksByPlaylistId(playlistId);
-    if(tracks.length < 4) {
-      throw new BadRequestException()
+    if (tracks.length < 4) {
+      throw new BadRequestException();
     }
     return tracks;
-    
   }
 }

@@ -3,7 +3,7 @@ import { TrackDto } from '../../../dtos';
 /**
  * DTO for displayed tracks for user
  */
-export interface TracksForUser {
+export class TracksForUserDto{
   /**
    * Tracks for display for user
    */
@@ -12,5 +12,5 @@ export interface TracksForUser {
   /**
    * HTTP link to mp3 file
    */
-  mp3: string;
+  mp3: TrackDto['mp3'];
 }

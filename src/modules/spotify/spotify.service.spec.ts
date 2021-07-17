@@ -52,9 +52,7 @@ describe('SpotifyApiService', () => {
       cover: 'https://i.scdn.co/image/ab67706f000000034647a679d5cc388b5c58fa13',
       id: '37i9dQZF1DXathzFlVFFpY',
       name: 'Хиты русского рэпа',
-      getTracks: expect.any(Function),
     });
-    expect((await result.getTracks()).length).toBeGreaterThan(10);
   });
 
   it('should get tracks by playlist id', async () => {

@@ -37,10 +37,10 @@ describe('Game', () => {
   it('Should choose', async () => {
     gameInstance.setPlaylist(PLAYLIST_MOCK);
     await gameInstance.next();
-    const result = gameInstance.choose(3);
+    const result = gameInstance.choose('trackId3');
     expect(gameInstance.result.progress).toHaveLength(1);
     expect(gameInstance.result.progress[0]).toBe(
-      gameInstance['correctTrack'].id === 3,
+      gameInstance['correctTrack'].id === 'trackId3',
     );
     expect(result).toEqual({
       correct: gameInstance['correctTrack'].id,

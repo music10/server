@@ -3,7 +3,7 @@ import { PlaylistDto } from '../../../dtos';
 /**
  * DTO for results of get result
  */
-export interface ResultResult {
+export class ResultDto {
   /**
    * Current playlist
    */
