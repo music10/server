@@ -1,8 +1,10 @@
+import { ApiExtraModels } from '@nestjs/swagger';
 import { PlaylistDto } from '../../../dtos';
 
 /**
  * DTO for results of get result
  */
+@ApiExtraModels
 export class ResultDto {
   /**
    * Current playlist

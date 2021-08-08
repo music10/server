@@ -1,4 +1,4 @@
-import { PLAYLIST_MOCK } from '../../../../__tests__/mocks';
+import { PLAYLIST_MOCK, TRACKS_MOCK } from '../../../../__tests__/mocks';
 import { Game } from './game.entity';
 
 describe('Game', () => {
@@ -14,12 +14,12 @@ describe('Game', () => {
   });
 
   it('Should set playlist', () => {
-    gameInstance.setPlaylist(PLAYLIST_MOCK);
+    gameInstance.setPlaylist(PLAYLIST_MOCK, async () => TRACKS_MOCK);
     expect(gameInstance.result).toBeDefined();
   });
 
   it('Should get next', async () => {
-    gameInstance.setPlaylist(PLAYLIST_MOCK);
+    gameInstance.setPlaylist(PLAYLIST_MOCK, async () => TRACKS_MOCK);
     const nextTracks = await gameInstance.next();
 
     expect(gameInstance.displayedTracks).toBeDefined();
@@ -27,7 +27,7 @@ describe('Game', () => {
     expect(nextTracks.mp3).toEqual(expect.any(String));
     expect(nextTracks.tracks).toHaveLength(4);
     expect(nextTracks.tracks[0]).toStrictEqual({
-      id: expect.any(Number),
+      id: expect.any(String),
       name: expect.any(String),
       artist: expect.any(String),
       album: expect.any(String),
@@ -35,7 +35,7 @@ describe('Game', () => {
   });
 
   it('Should choose', async () => {
-    gameInstance.setPlaylist(PLAYLIST_MOCK);
+    gameInstance.setPlaylist(PLAYLIST_MOCK, async () => TRACKS_MOCK);
     await gameInstance.next();
     const result = gameInstance.choose('trackId3');
     expect(gameInstance.result.progress).toHaveLength(1);

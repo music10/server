@@ -3,6 +3,7 @@
  */
 import { TrackDto } from '../../../dtos';
 
+@ApiExtraModels
 export class ChooseAnswerDto {
   /**
    * Correct track id

@@ -1,9 +1,11 @@
+import { ApiExtraModels } from '@nestjs/swagger';
 import { TrackDto } from '../../../dtos';
 
 /**
  * DTO for displayed tracks for user
  */
-export class TracksForUserDto{
+@ApiExtraModels
+export class TracksForUserDto {
   /**
    * Tracks for display for user
    */

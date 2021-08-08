@@ -1,6 +1,9 @@
+import { ApiExtraModels } from '@nestjs/swagger';
+
 /**
  * Artist DTO
  */
+@ApiExtraModels
 export class ArtistDto {
   /**
    * Playlist id
