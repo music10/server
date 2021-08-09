@@ -4,7 +4,7 @@ import { PlaylistDto } from '../../../dtos';
 /**
  * DTO for results of get result
  */
-@ApiExtraModels
+@ApiExtraModels()
 export class ResultDto {
   /**
    * Current playlist

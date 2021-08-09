@@ -4,7 +4,7 @@ import { TrackDto } from '../../../dtos';
 /**
  * DTO for displayed tracks for user
  */
-@ApiExtraModels
+@ApiExtraModels()
 export class TracksForUserDto {
   /**
    * Tracks for display for user

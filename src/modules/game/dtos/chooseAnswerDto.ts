@@ -1,9 +1,10 @@
+import { ApiExtraModels } from '@nestjs/swagger';
+import { TrackDto } from '../../../dtos';
+
 /**
  * DTO for results of user choose
  */
-import { TrackDto } from '../../../dtos';
-
-@ApiExtraModels
+@ApiExtraModels()
 export class ChooseAnswerDto {
   /**
    * Correct track id
