@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+import { AxiosError } from 'axios';
 import { ArtistDto, PlaylistDto, TrackDto } from '../../dtos';
 
 const SPOTIFY_OWNER_ID = 'spotify';
@@ -31,7 +32,7 @@ export class SpotifyService {
 
     this.httpService.axiosRef.interceptors.response.use(
       (value) => value,
-      async (error) => {
+      async (error: AxiosError) => {
         if (
           error.response?.data?.error?.message === 'The access token expired'
         ) {
@@ -54,6 +55,13 @@ export class SpotifyService {
               return this.httpService.axiosRef.request(newConfig);
             })
             .catch(console.error);
+        } else if (error.response.status === 429) {
+          return new Promise((resolve) =>
+            setTimeout(
+              () => resolve(this.httpService.axiosRef.request(error.config)),
+              error.response.headers['retry-after'] * 1000,
+            ),
+          );
         }
         return Promise.reject(error);
       },
