@@ -1,5 +1,4 @@
 import { PlaylistDto } from '../../src/dtos';
-import { TRACKS_MOCK } from './tracks';
 
 /**
  * Example of PlaylistDto

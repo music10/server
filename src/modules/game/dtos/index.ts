@@ -1,3 +1,3 @@
-export * from './chooseAnswerDto';
-export * from './resultDto';
+export * from './chooseAnswer.dto';
+export * from './result.dto';
 export * from './tracksForUser.dto';
