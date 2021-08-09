@@ -15,10 +15,7 @@ export class PlaylistsController {
    */
   @Get()
   async getPlaylists(@Query('query') query: string) {
-    console.time('by name');
-    const r = await this.service.searchPlaylists(query);
-    console.timeEnd('by name');
-    return r;
+    return this.service.searchPlaylists(query);
   }
 
   /**
@@ -37,10 +34,7 @@ export class PlaylistsController {
    */
   @Get('/artist')
   async getPlaylistsByArtist(@Query('query') query: string) {
-    console.time('by artist');
-    const r = await this.service.searchPlaylistsByArtist(query);
-    console.timeEnd('by artist');
-    return r;
+    return this.service.searchPlaylistsByArtist(query);
   }
 
   /**
@@ -59,7 +53,7 @@ export class PlaylistsController {
    * @return {PlaylistDto[]} playlists - array of playlists
    */
   @Get('/:id/tracks')
-  findTracksByPlaylistId(@Query('playlistId') playlistId: string) {
+  findTracksByPlaylistId(@Param('id') playlistId: string) {
     return this.service.getTracksByPlaylistId(playlistId);
   }
 }
