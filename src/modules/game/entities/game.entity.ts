@@ -1,8 +1,6 @@
 import { PlaylistDto, TrackDto } from '../../../dtos';
 import { randomSort } from '../../../utils';
-import { TracksForUser } from '../dtos/tracksForUser';
-import { ChooseResult } from '../dtos/chooseResult';
-import { ResultResult } from '../dtos/resultResult';
+import { ChooseAnswerDto, ResultDto, TracksForUserDto } from '../dtos';
 import { HEADER_TEXT } from '../../share/variables';
 import { Result } from './result.entity';
 
@@ -33,6 +31,12 @@ export class Game {
   private playlist: PlaylistDto;
 
   /**
+   * Current playlist
+   * @private
+   */
+  private getTracks: () => Promise<TrackDto[]>;
+
+  /**
    * Tracks array for this game session
    * @private
    */
@@ -40,10 +44,15 @@ export class Game {
 
   /**
    * Set playlist for this game session
-   * @param playlist
+   * @param {PlaylistDto} playlist
+   * @param {Promise<TrackDto[]>} getTracks
    */
-  setPlaylist(playlist: PlaylistDto): PlaylistDto {
+  setPlaylist(
+    playlist: PlaylistDto,
+    getTracks: () => Promise<TrackDto[]>,
+  ): PlaylistDto {
     this.playlist = playlist;
+    this.getTracks = getTracks;
     this.result = new Result();
     return playlist;
   }
@@ -51,7 +60,7 @@ export class Game {
   /**
    * Get next tracks for user
    */
-  async next(): Promise<TracksForUser> {
+  async next(): Promise<TracksForUserDto> {
     await this.fillTracks();
     await this.sortTracks();
     const correctTrack = this.tracks.shift();
@@ -69,7 +78,7 @@ export class Game {
    * Accept user choose
    * @param chooseTrackId
    */
-  choose(chooseTrackId: number): ChooseResult {
+  choose(chooseTrackId: string): ChooseAnswerDto {
     this.result.updateProgress(chooseTrackId === this.correctTrack.id);
     return { correct: this.correctTrack.id };
   }
@@ -77,7 +86,7 @@ export class Game {
   /**
    * Get results
    */
-  getResult(): ResultResult {
+  getResult(): ResultDto {
     const guessed = this.result.progress.filter((item) => item).length;
     return {
       guessed,
@@ -92,7 +101,7 @@ export class Game {
    */
   private async fillTracks(): Promise<void> {
     while (this.tracks.length < 4) {
-      this.tracks = randomSort([...(await this.playlist.getTracks())]);
+      this.tracks = randomSort([...(await this.getTracks())]);
     }
   }
 

@@ -82,15 +82,26 @@ export class SpotifyService {
           type: 'playlist',
         },
       }),
-    ).then(({ data }) =>
-      data.playlists.items
-        .filter((playlist) => playlist.tracks.total > 40)
-        .slice(0, 20)
-        .map(({ id, name, images }) => ({
-          id,
-          name,
-          cover: images[0].url,
-        })),
+    ).then(
+      async ({ data }) =>
+        await Promise.all(
+          data.playlists.items
+            .filter((playlist) => playlist.tracks.total > 40)
+            .map(async (playlist) => ({
+              ...playlist,
+              active:
+                (await this.getTracksByPlaylistId(playlist.id)).length >= 40,
+            })),
+        ).then((playlists) =>
+          playlists
+            .filter(({ active }) => active)
+            .slice(0, 20)
+            .map(({ id, name, images }) => ({
+              id,
+              name,
+              cover: images[0].url,
+            })),
+        ),
     );
   }
 
@@ -137,6 +148,9 @@ export class SpotifyService {
           ({ tracks, owner }) =>
             tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
         )
+        .filter(
+          async ({ id }) => (await this.getTracksByPlaylistId(id)).length >= 40,
+        )
         .slice(0, 20)
         .map(({ id, name, images }) => ({
           id,
@@ -162,7 +176,6 @@ export class SpotifyService {
       name: data.name,
       id: data.id,
       cover: data.images[0].url,
-      getTracks: () => this.getTracksByPlaylistId(playlistId),
     }));
   }
 

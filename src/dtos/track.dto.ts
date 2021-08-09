@@ -5,7 +5,7 @@ export class TrackDto {
   /**
    * Track id
    */
-  id: number;
+  id: string;
 
   /**
    * Track name

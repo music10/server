@@ -21,28 +21,28 @@ describe('GameService', () => {
   });
 
   it('should add client', () => {
-    service.addClient('123');
-    service.addClient('123');
-    service.addClient('234');
+    service.addClient('clientId123');
+    service.addClient('clientId123');
+    service.addClient('clientId234');
     expect(service['clients']).toStrictEqual({
-      '123': expect.any(Game),
-      '234': expect.any(Game),
+      clientId123: expect.any(Game),
+      clientId234: expect.any(Game),
     });
   });
 
   it('should remove client', () => {
-    service.addClient('123');
-    service.addClient('234');
-    service.removeClient('123');
-    service.removeClient('123');
+    service.addClient('clientId123');
+    service.addClient('clientId234');
+    service.removeClient('clientId123');
+    service.removeClient('clientId123');
     expect(service['clients']).toStrictEqual({
-      '234': expect.any(Game),
+      clientId234: expect.any(Game),
     });
   });
 
   it('should get client', () => {
-    service.addClient('123');
-    expect(service.getClient('123')).toStrictEqual(expect.any(Game));
-    expect(service.getClient('234')).not.toBeDefined();
+    service.addClient('clientId123');
+    expect(service.getClient('clientId123')).toStrictEqual(expect.any(Game));
+    expect(service.getClient('clientId234')).not.toBeDefined();
   });
 });

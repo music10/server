@@ -8,12 +8,12 @@ import { PLAYLISTS_MOCK, PLAYLIST_MOCK } from './mocks';
 
 describe('PlaylistsController (e2e)', () => {
   let app: INestApplication;
-  const apiService = {
-    getPlaylists: () => PLAYLISTS_MOCK,
-    getCherryPickPlaylists: () => PLAYLISTS_MOCK,
-    getPlaylist: () => PLAYLIST_MOCK,
-    searchPlaylists: () => PLAYLISTS_MOCK,
-    searchPlaylistsByArtist: () => PLAYLISTS_MOCK,
+  const playlistsService = {
+    getPlaylists: async () => PLAYLISTS_MOCK,
+    getCherryPickPlaylists: async () => PLAYLISTS_MOCK,
+    getPlaylist: async () => PLAYLIST_MOCK,
+    searchPlaylists: async () => PLAYLISTS_MOCK,
+    searchPlaylistsByArtist: async () => PLAYLISTS_MOCK,
   };
 
   beforeAll(async () => {
@@ -21,7 +21,7 @@ describe('PlaylistsController (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(PlaylistsService)
-      .useValue(apiService)
+      .useValue(playlistsService)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -31,37 +31,31 @@ describe('PlaylistsController (e2e)', () => {
   it('/playlists (GET)', async () => {
     return request(app.getHttpServer())
       .get('/playlists')
-      .expect(200)
-      .expect(PLAYLISTS_MOCK);
+      .expect(200, PLAYLISTS_MOCK);
   });
 
   it('/playlists?query=Eminem (GET)', async () => {
     return request(app.getHttpServer())
       .get('/playlists?query=Rap')
-      .expect(200)
-      .expect(PLAYLISTS_MOCK);
+      .expect(200, PLAYLISTS_MOCK);
   });
 
   it('/playlists/artist?query=Eminem (GET)', async () => {
     return request(app.getHttpServer())
       .get('/playlists/artist?query=Eminem')
-      .expect(200)
-      .expect(PLAYLISTS_MOCK);
+      .expect(200, PLAYLISTS_MOCK);
   });
 
   it('/playlists/cherry-pick (GET)', async () => {
     return request(app.getHttpServer())
       .get('/playlists/cherry-pick')
-      .expect(200)
-      .expect(PLAYLISTS_MOCK);
+      .expect(200, PLAYLISTS_MOCK);
   });
 
   it('/playlists/{id} (GET)', async () => {
-    const { id, name, cover } = PLAYLIST_MOCK;
     return request(app.getHttpServer())
       .get('/playlists/123')
-      .expect(200)
-      .expect({ id, name, cover });
+      .expect(200, PLAYLIST_MOCK);
   });
 
   afterAll(async () => {

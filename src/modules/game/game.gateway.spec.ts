@@ -38,9 +38,9 @@ describe('GameGateway', () => {
       .spyOn(playlistService, 'getPlaylist')
       .mockReturnValue(new Promise((resolve) => resolve(PLAYLIST_MOCK)));
     jest.spyOn(game, 'setPlaylist');
-    jest.spyOn(game, 'next');
+    jest.spyOn(game, 'next').mockImplementation(() => void 0);
     jest.spyOn(game, 'getResult');
-    jest.spyOn(game, 'choose');
+    jest.spyOn(game, 'choose').mockImplementation(() => void 0);
   });
 
   it('should be defined', () => {
@@ -62,24 +62,30 @@ describe('GameGateway', () => {
   it('should setPlaylist', async () => {
     await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
     expect(game.setPlaylist).toHaveBeenCalledTimes(1);
-    expect(game.setPlaylist).toHaveBeenCalledWith({
-      id: '6536346784',
-      cover: 'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
-      name: 'Русский рэп',
-      getTracks: expect.any(Function),
-    });
+    expect(game.setPlaylist).toHaveBeenCalledWith(
+      {
+        id: '6536346784',
+        cover:
+          'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
+        name: 'Русский рэп',
+      },
+      expect.any(Function),
+    );
   });
 
   it('should getNextTracks', async () => {
+    await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
     await gateway.getNextTracks(MOCK_SOCKET);
     expect(game.next).toHaveBeenCalledTimes(1);
     expect(game.next).toHaveBeenCalledWith();
   });
 
   it('should choose', async () => {
-    await gateway.chooseTrack(MOCK_SOCKET, 2);
+    await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
+    await gateway.getNextTracks(MOCK_SOCKET);
+    await gateway.chooseTrack(MOCK_SOCKET, 'trackId1');
     expect(game.choose).toHaveBeenCalledTimes(1);
-    expect(game.choose).toHaveBeenCalledWith(2);
+    expect(game.choose).toHaveBeenCalledWith('trackId1');
   });
 
   it('should get result', async () => {
