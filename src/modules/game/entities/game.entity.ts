@@ -1,3 +1,4 @@
+import { BadGatewayException } from '@nestjs/common';
 import { PlaylistDto, TrackDto } from '../../../dtos';
 import { randomSort } from '../../../utils';
 import { ChooseAnswerDto, ResultDto, TracksForUserDto } from '../dtos';
@@ -101,7 +102,11 @@ export class Game {
    */
   private async fillTracks(): Promise<void> {
     while (this.tracks.length < 4) {
-      this.tracks = randomSort([...(await this.getTracks())]);
+      const tracks = await this.getTracks();
+      if (tracks.length < 4) {
+        throw new BadGatewayException(`Bad playlist ${this.playlist.id}`);
+      }
+      this.tracks = randomSort([...tracks]);
     }
   }
 

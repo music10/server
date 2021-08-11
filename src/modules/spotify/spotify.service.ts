@@ -55,7 +55,7 @@ export class SpotifyService {
               return this.httpService.axiosRef.request(newConfig);
             })
             .catch(console.error);
-        } else if (error.response.status === 429) {
+        } else if (error.response?.status === 429) {
           return new Promise((resolve) =>
             setTimeout(
               () => resolve(this.httpService.axiosRef.request(error.config)),
@@ -94,7 +94,7 @@ export class SpotifyService {
       async ({ data }) =>
         await Promise.all(
           data.playlists.items
-            .filter((playlist) => playlist.tracks.total > 40)
+            .filter(({ tracks }) => tracks.total > 40)
             .map(async (playlist) => ({
               ...playlist,
               active:
@@ -150,21 +150,29 @@ export class SpotifyService {
           type: 'playlist',
         },
       }),
-    ).then(({ data }) =>
-      data.playlists.items
-        .filter(
-          ({ tracks, owner }) =>
-            tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
-        )
-        .filter(
-          async ({ id }) => (await this.getTracksByPlaylistId(id)).length >= 40,
-        )
-        .slice(0, 20)
-        .map(({ id, name, images }) => ({
-          id,
-          name,
-          cover: images[0].url,
-        })),
+    ).then(
+      async ({ data }) =>
+        await Promise.all(
+          data.playlists.items
+            .filter(
+              ({ tracks, owner }) =>
+                tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
+            )
+            .map(async (playlist) => ({
+              ...playlist,
+              active:
+                (await this.getTracksByPlaylistId(playlist.id)).length >= 40,
+            })),
+        ).then((playlists) =>
+          playlists
+            .filter(({ active }) => active)
+            .slice(0, 20)
+            .map(({ id, name, images }) => ({
+              id,
+              name,
+              cover: images[0].url,
+            })),
+        ),
     );
   }
 
@@ -181,8 +189,8 @@ export class SpotifyService {
         },
       }),
     ).then(({ data }) => ({
-      name: data.name,
       id: data.id,
+      name: data.name,
       cover: data.images[0].url,
     }));
   }

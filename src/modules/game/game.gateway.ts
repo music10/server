@@ -65,7 +65,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const playlist = await this.playlistsService.getPlaylist(playlistId);
     socket.emit(
       'playlist',
-      await this.gameService
+      this.gameService
         .getClient(socket.id)
         .setPlaylist(playlist, () =>
           this.playlistsService.getTracksByPlaylistId(playlistId),

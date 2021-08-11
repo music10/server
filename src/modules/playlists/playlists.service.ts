@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SpotifyService } from '../spotify';
 
 /**
@@ -80,10 +80,6 @@ export class PlaylistsService {
    * @return {TrackDto[]} tracks - array of tracks
    */
   async getTracksByPlaylistId(playlistId: string) {
-    const tracks = await this.apiService.getTracksByPlaylistId(playlistId);
-    if (tracks.length < 4) {
-      throw new BadRequestException();
-    }
-    return tracks;
+    return await this.apiService.getTracksByPlaylistId(playlistId);
   }
 }
