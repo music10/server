@@ -1,3 +1,4 @@
+import { randomInt } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { SpotifyService } from '../spotify';
 
@@ -20,6 +21,15 @@ export class PlaylistsService {
     return this.apiService.getCherryPickPlaylists();
   }
 
+  /**
+   * Get Random playlist from featured
+   * @return {PlaylistDto} playlists - playlists
+   */
+  async getRandomPlaylist() {
+    const playlists = await this.apiService.getFeaturedPlaylists();
+    const randomIndex = randomInt(playlists.length);
+    return playlists[randomIndex];
+  }
   /**
    * Search playlists by query-string
    * @param query - query-string

@@ -22,6 +22,10 @@ describe('SpotifyApiService', () => {
     expect(await service.getCherryPickPlaylists()).toMatchSnapshot();
   });
 
+  it('should get featured playlists', async () => {
+    expect((await service.getFeaturedPlaylists()).length).toBeGreaterThan(1);
+  });
+
   it('should search playlists', async () => {
     expect(await service.searchPlaylists('русский')).toEqual(
       expect.arrayContaining([

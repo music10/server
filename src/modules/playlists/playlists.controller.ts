@@ -29,6 +29,15 @@ export class PlaylistsController {
 
   /**
    * Get cherry-pick playlists
+   * @return {PlaylistDto} playlists - array of playlists
+   */
+  @Get('/random')
+  getRandomPlaylist() {
+    return this.service.getRandomPlaylist();
+  }
+
+  /**
+   * Get cherry-pick playlists
    * @param {string} query - query string for search playlists
    * @return {PlaylistDto[]} playlists - array of playlists
    */
