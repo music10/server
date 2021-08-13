@@ -114,6 +114,40 @@ export class SpotifyService {
   }
 
   /**
+   * Search playlists by query-string
+   * @return {PlaylistDto[]} playlists
+   */
+  async getFeaturedPlaylists(): Promise<PlaylistDto[]> {
+    return firstValueFrom(
+      this.httpService.get(`/browse/featured-playlists`, {
+        params: {
+          limit: 20,
+          type: 'playlist',
+        },
+      }),
+    ).then(
+      async ({ data }) =>
+        await Promise.all(
+          data.playlists.items
+            .filter(({ tracks }) => tracks.total > 40)
+            .map(async (playlist) => ({
+              ...playlist,
+              active:
+                (await this.getTracksByPlaylistId(playlist.id)).length >= 40,
+            })),
+        ).then((playlists) =>
+          playlists
+            .filter(({ active }) => active)
+            .map(({ id, name, images }) => ({
+              id,
+              name,
+              cover: images[0].url,
+            })),
+        ),
+    );
+  }
+
+  /**
    * Search artists by query-string
    * @param {string} query
    * @return {ArtistDto[]} artists
@@ -220,7 +254,8 @@ export class SpotifyService {
    * Get tracks by playlist id
    * @param {string} playlistId - playlist id
    * @return {TrackDto[]} tracks
-   */ async getTracksByPlaylistId(playlistId: string): Promise<TrackDto[]> {
+   */
+  async getTracksByPlaylistId(playlistId: string): Promise<TrackDto[]> {
     const tracks = [];
     return new Promise<TrackDto[]>((resolve) => {
       const responseHandler = ({ data }) => {
@@ -250,6 +285,44 @@ export class SpotifyService {
           params: {
             fields:
               'next,items(track(id,artists(name),name,preview_url,album(name)))',
+          },
+        }),
+      )
+        .then(responseHandler)
+        .catch(console.error);
+    });
+  }
+
+  async parsePlaylist(playlistId: string): Promise<any> {
+    const tracks = [];
+    return new Promise<any>((resolve) => {
+      const responseHandler = ({ data }) => {
+        tracks.push(
+          ...data.items
+            .filter(({ track }) => track?.preview_url)
+            .map(({ track }) => ({
+              name: track.name,
+              id: track.id,
+              album: track.album.name,
+              artist: track.artists.map((artist) => artist.name).join(', '),
+              mp3: track.preview_url,
+            })),
+        );
+
+        if (data.next) {
+          firstValueFrom(this.httpService.get(data.next))
+            .then(responseHandler)
+            .catch(console.error);
+        } else {
+          resolve({ total: data.total, tracks: tracks.length });
+        }
+      };
+
+      firstValueFrom(
+        this.httpService.get(`/playlists/${playlistId}/tracks`, {
+          params: {
+            fields:
+              'next,items(track(id,artists(name),name,preview_url,album(name))),total',
           },
         }),
       )

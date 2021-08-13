@@ -18,6 +18,14 @@ describe('PlaylistsService', () => {
 
     jest.spyOn(apiService, 'getCherryPickPlaylists');
     jest
+      .spyOn(apiService, 'getFeaturedPlaylists')
+      .mockImplementation(async () => [
+        PLAYLIST_MOCK,
+        PLAYLIST_MOCK,
+        PLAYLIST_MOCK,
+        PLAYLIST_MOCK,
+      ]);
+    jest
       .spyOn(apiService, 'getArtistById')
       .mockImplementation(async () => ({ id: 'artistId1', name: 'Eminem' }));
     jest
@@ -33,6 +41,12 @@ describe('PlaylistsService', () => {
     await service.getCherryPickPlaylists();
     expect(apiService.getCherryPickPlaylists).toHaveBeenCalledTimes(1);
     expect(apiService.getCherryPickPlaylists).toHaveBeenCalledWith();
+  });
+
+  it('should get random playlist', async () => {
+    const randomPlaylist = await service.getRandomPlaylist();
+    expect(apiService.getFeaturedPlaylists).toHaveBeenCalledTimes(1);
+    expect(randomPlaylist).toMatchObject(PLAYLIST_MOCK);
   });
 
   it('should artist by id', async () => {
