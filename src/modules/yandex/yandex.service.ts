@@ -1,72 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { AxiosError } from 'axios';
 import { ArtistDto, PlaylistDto, TrackDto } from '../../dtos';
 
-const SPOTIFY_OWNER_ID = 'yandex';
+const PAGE_SIZE = 20;
 
 /**
- * Service for Spotify Api
+ * Service for Yandex.Music Api
  */
 @Injectable()
-export class SpotifyService {
-  /**
-   * Token for Spotify API
-   * Random value by default
-   * @private
-   */
-  private headers = {
-    Authorization:
-      'Bearer BQAOGPdvZEAULEm9VsQdtHaxyzHn1i2niRQNJG5Uw2-txmlpOTsM6PfSbDjrKRBFiQbS7UciS_Ajhm7CZUs',
-  };
-
+export class YandexService {
   /**
    * SpotifyApiService constructor
    */
-  constructor(private httpService: HttpService) {
-    this.httpService.axiosRef.interceptors.request.use((config) => ({
-      ...config,
-      headers: { ...this.headers, ...config.headers },
-    }));
-
-    this.httpService.axiosRef.interceptors.response.use(
-      (value) => value,
-      async (error: AxiosError) => {
-        if (
-          error.response?.data?.error?.message === 'The access token expired'
-        ) {
-          return await firstValueFrom(
-            this.httpService.post(
-              'https://accounts.spotify.com/api/token',
-              'grant_type=client_credentials',
-              {
-                headers: {
-                  Authorization: `Basic ${process.env.SPOTIFY_AUTH_TOKEN}`,
-                },
-              },
-            ),
-          )
-            .then(({ data }) => {
-              const newToken = `Bearer ${data['access_token']}`;
-              this.headers.Authorization = newToken;
-              const newConfig = error.config;
-              newConfig.headers.Authorization = newToken;
-              return this.httpService.axiosRef.request(newConfig);
-            })
-            .catch(console.error);
-        } else if (error.response?.status === 429) {
-          return new Promise((resolve) =>
-            setTimeout(
-              () => resolve(this.httpService.axiosRef.request(error.config)),
-              error.response.headers['retry-after'] * 1000,
-            ),
-          );
-        }
-        return Promise.reject(error);
-      },
-    );
-  }
+  constructor(private httpService: HttpService) {}
 
   /**
    * Get playlists
@@ -86,36 +33,28 @@ export class SpotifyService {
     return firstValueFrom(
       this.httpService.get(`/search`, {
         params: {
-          q: query,
+          text: query,
           type: 'playlist',
+          page: 0,
+          page_size: PAGE_SIZE,
+          nocorrect: false,
         },
       }),
-    ).then(
-      async ({ data }) =>
-        await Promise.all(
-          data.playlists.items
-            .filter(({ tracks }) => tracks.total > 40)
-            .map(async (playlist) => ({
-              ...playlist,
-              active:
-                (await this.getTracksByPlaylistId(playlist.id)).length >= 40,
-            })),
-        ).then((playlists) =>
-          playlists
-            .filter(({ active }) => active)
-            .slice(0, 20)
-            .map(({ id, name, images }) => ({
-              id,
-              name,
-              cover: images[0].url,
-            })),
-        ),
+    ).then(({ data }) =>
+      data.result.playlists.results
+        .filter(({ trackCount }) => trackCount > 40)
+        .map((playlist) => ({
+          id: playlist.playlistUuid,
+          name: playlist.title,
+          cover: 'https://' + playlist.cover.uri.replace('%%', '200x200'),
+        })),
     );
   }
 
   /**
    * Search playlists by query-string
    * @return {PlaylistDto[]} playlists
+   * @deprecated
    */
   async getFeaturedPlaylists(): Promise<PlaylistDto[]> {
     return firstValueFrom(
@@ -155,18 +94,44 @@ export class SpotifyService {
   async searchArtists(query: string): Promise<ArtistDto[]> {
     return firstValueFrom(
       this.httpService.get(`/search`, {
-        headers: {
-          'accept-language': 'en',
-        },
         params: {
-          q: query,
+          text: query,
           type: 'artist',
+          page: 0,
+          page_size: PAGE_SIZE,
+          nocorrect: false,
         },
       }),
     ).then(({ data }) =>
-      data.artists.items.slice(0, 10).map(({ id, name }) => ({
-        id,
-        name,
+      data.result.artists.results
+        .filter(({ counts }) => counts.tracks > 40)
+        .map((artist) => ({
+          id: artist.id,
+          name: artist.name,
+          cover: 'https://' + artist.cover.uri.replace('%%', '200x200'),
+        })),
+    );
+  }
+
+  /**
+   * Get tracks by artist id
+   * @param artistId
+   */
+  async getTracksByArtist(artistId: number): Promise<TrackDto[]> {
+    return firstValueFrom(
+      this.httpService.get(`/artists/${artistId}/tracks`, {
+        params: {
+          page: 0,
+          page_size: 1000,
+        },
+      }),
+    ).then(({ data }) =>
+      data.result.tracks.map((track) => ({
+        id: track.id,
+        name: track.title,
+        artist: track.artists.map((artist) => artist.name).join(', '),
+        album: track.albums.map((album) => album.title).join(', '),
+        mp3: '',
       })),
     );
   }
@@ -175,6 +140,7 @@ export class SpotifyService {
    * Search playlists by artist via query-string
    * @param {string} query
    * @return {PlaylistDto[]} playlists
+   * @deprecated
    */
   async searchPlaylistsByArtist(query: string): Promise<PlaylistDto[]> {
     return firstValueFrom(
@@ -188,10 +154,10 @@ export class SpotifyService {
       async ({ data }) =>
         await Promise.all(
           data.playlists.items
-            .filter(
-              ({ tracks, owner }) =>
-                tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
-            )
+            // .filter(
+            //   ({ tracks, owner }) =>
+            //     tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
+            // )
             .map(async (playlist) => ({
               ...playlist,
               active:
@@ -214,6 +180,7 @@ export class SpotifyService {
    * Get playlist by id
    * @param {string} playlistId - playlist id
    * @return {PlaylistDto} playlist
+   * @deprecated
    */
   async getPlaylistById(playlistId: string): Promise<PlaylistDto> {
     return firstValueFrom(
@@ -233,6 +200,7 @@ export class SpotifyService {
    * Get artist by id
    * @param {string} artistId - playlist id
    * @return {ArtistDto} artist
+   * @deprecated
    */
   async getArtistById(artistId: string): Promise<ArtistDto> {
     return firstValueFrom(
@@ -247,6 +215,7 @@ export class SpotifyService {
     ).then(({ data }) => ({
       name: data.name,
       id: data.id,
+      cover: '',
     }));
   }
 
@@ -254,6 +223,7 @@ export class SpotifyService {
    * Get tracks by playlist id
    * @param {string} playlistId - playlist id
    * @return {TrackDto[]} tracks
+   * @deprecated
    */
   async getTracksByPlaylistId(playlistId: string): Promise<TrackDto[]> {
     const tracks = [];
@@ -293,6 +263,10 @@ export class SpotifyService {
     });
   }
 
+  /**
+   * @deprecated
+   * @param playlistId
+   */
   async parsePlaylist(playlistId: string): Promise<any> {
     const tracks = [];
     return new Promise<any>((resolve) => {
@@ -335,6 +309,7 @@ export class SpotifyService {
    * Get track by id
    * @param {string} trackId
    * @return {TrackDto} track
+   * @deprecated
    */
   async getTrackById(trackId: string): Promise<TrackDto> {
     return firstValueFrom(

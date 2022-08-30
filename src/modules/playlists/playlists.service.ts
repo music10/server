@@ -1,6 +1,6 @@
 import { randomInt } from 'crypto';
 import { Injectable } from '@nestjs/common';
-import { SpotifyService } from '../spotify';
+import { YandexService } from '../yandex';
 
 /**
  * PlaylistDto service
@@ -11,7 +11,7 @@ export class PlaylistsService {
    * PlaylistsService constructor
    * @param apiService
    */
-  constructor(private apiService: SpotifyService) {}
+  constructor(private apiService: YandexService) {}
 
   /**
    * Get all playlists

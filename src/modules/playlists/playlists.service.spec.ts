@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SpotifyModule, SpotifyService } from '../spotify';
+import { YandexModule, YandexService } from '../yandex';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
 import { PlaylistsService } from './playlists.service';
 
 describe('PlaylistsService', () => {
   let service: PlaylistsService;
-  let apiService: SpotifyService;
+  let apiService: YandexService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SpotifyModule],
+      imports: [YandexModule],
       providers: [PlaylistsService],
     }).compile();
 
     service = module.get<PlaylistsService>(PlaylistsService);
-    apiService = module.get<SpotifyService>(SpotifyService);
+    apiService = module.get<YandexService>(YandexService);
 
     jest.spyOn(apiService, 'getCherryPickPlaylists');
     jest

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SpotifyModule } from '../spotify';
+import { YandexModule } from '../yandex';
 import {
   PLAYLIST_MOCK,
   PLAYLISTS_MOCK,
@@ -14,7 +14,7 @@ describe('PlaylistsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SpotifyModule],
+      imports: [YandexModule],
       providers: [PlaylistsService],
       controllers: [PlaylistsController],
     }).compile();
