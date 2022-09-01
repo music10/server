@@ -97,7 +97,7 @@ export class Game {
   }
 
   /**
-   * Fill track list if less then 4 tracks
+   * Fill track list if less than 4 tracks
    * @private
    */
   private async fillTracks(): Promise<void> {

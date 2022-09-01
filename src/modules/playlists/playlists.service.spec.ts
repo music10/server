@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { YandexModule, YandexService } from '../yandex';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
+import { Type } from '../yandex/yandex.types';
 import { PlaylistsService } from './playlists.service';
 
 describe('PlaylistsService', () => {
@@ -26,11 +27,6 @@ describe('PlaylistsService', () => {
         PLAYLIST_MOCK,
         PLAYLIST_MOCK,
       ]);
-    jest.spyOn(apiService, 'getArtistById').mockImplementation(async () => ({
-      id: 'artistId1',
-      name: 'Eminem',
-      cover: '',
-    }));
     jest
       .spyOn(apiService, 'getPlaylistById')
       .mockImplementation(async () => PLAYLIST_MOCK);
@@ -40,27 +36,24 @@ describe('PlaylistsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should get cherry pick playlists', async () => {
+  it.skip('should get cherry pick playlists', async () => {
     await service.getCherryPickPlaylists();
     expect(apiService.getCherryPickPlaylists).toHaveBeenCalledTimes(1);
     expect(apiService.getCherryPickPlaylists).toHaveBeenCalledWith();
   });
 
-  it('should get random playlist', async () => {
+  it.skip('should get random playlist', async () => {
     const randomPlaylist = await service.getRandomPlaylist();
     expect(apiService.getFeaturedPlaylists).toHaveBeenCalledTimes(1);
     expect(randomPlaylist).toMatchObject(PLAYLIST_MOCK);
   });
 
-  it('should get artist by id', async () => {
-    await service.getArtist('artistId1');
-    expect(apiService.getArtistById).toHaveBeenCalledTimes(1);
-    expect(apiService.getArtistById).toHaveBeenCalledWith('artistId1');
-  });
-
   it('should get playlist by id', async () => {
     await service.getPlaylist('playlistId1');
     expect(apiService.getPlaylistById).toHaveBeenCalledTimes(1);
-    expect(apiService.getPlaylistById).toHaveBeenCalledWith('playlistId1');
+    expect(apiService.getPlaylistById).toHaveBeenCalledWith(
+      'playlistId1',
+      Type.playlist,
+    );
   });
 });

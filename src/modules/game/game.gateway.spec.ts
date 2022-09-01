@@ -5,6 +5,7 @@ import { PlaylistsModule } from '../playlists';
 import { YandexModule } from '../yandex';
 import { PlaylistsService } from '../playlists/playlists.service';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
+import { Type } from '../yandex/yandex.types';
 import { Game } from './entities/game.entity';
 import { GameService } from './game.service';
 import { GameGateway } from './game.gateway';
@@ -68,6 +69,8 @@ describe('GameGateway', () => {
         cover:
           'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
         name: 'Русский рэп',
+        tracks: expect.any(Array),
+        type: Type.playlist,
       },
       expect.any(Function),
     );
