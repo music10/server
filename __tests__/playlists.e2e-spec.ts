@@ -28,18 +28,6 @@ describe('PlaylistsController (e2e)', () => {
     await app.init();
   });
 
-  it('/playlists (GET)', async () => {
-    return request(app.getHttpServer())
-      .get('/playlists')
-      .expect(200, PLAYLISTS_MOCK);
-  });
-
-  it('/playlists?query=Eminem (GET)', async () => {
-    return request(app.getHttpServer())
-      .get('/playlists?query=Rap')
-      .expect(200, PLAYLISTS_MOCK);
-  });
-
   it('/playlists/artist?query=Eminem (GET)', async () => {
     return request(app.getHttpServer())
       .get('/playlists/artist?query=Eminem')
@@ -52,9 +40,9 @@ describe('PlaylistsController (e2e)', () => {
       .expect(200, PLAYLISTS_MOCK);
   });
 
-  it('/playlists/{id} (GET)', async () => {
+  it('/playlists/playlist/{id} (GET)', async () => {
     return request(app.getHttpServer())
-      .get('/playlists/123')
+      .get('/playlists/playlist/123')
       .expect(200, PLAYLIST_MOCK);
   });
 

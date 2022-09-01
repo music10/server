@@ -34,6 +34,7 @@ describe('YandexApiService', () => {
           id: expect.any(String),
           name: expect.any(String),
           cover: expect.any(String),
+          type: Type.playlist,
         },
       ]),
     );
@@ -46,6 +47,7 @@ describe('YandexApiService', () => {
           id: expect.any(Number),
           name: expect.any(String),
           cover: expect.any(String),
+          type: Type.artist,
         },
       ]),
     );
