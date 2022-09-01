@@ -26,10 +26,12 @@ export class PlaylistsService {
    * @return {PlaylistDto} playlists - playlists
    */
   async getRandomPlaylist() {
+    return [];
     const playlists = await this.apiService.getFeaturedPlaylists();
     const randomIndex = randomInt(playlists.length);
     return playlists[randomIndex];
   }
+
   /**
    * Search playlists by query-string
    * @param query - query-string
@@ -54,25 +56,7 @@ export class PlaylistsService {
    * @return {PlaylistDto[]} playlists - playlists
    */
   async searchPlaylistsByArtist(query: string) {
-    const artists = await this.apiService.searchArtists(query);
-    const uniqueIds = new Set();
-    const playlists = [];
-    const ret = (
-      await Promise.all(
-        artists.map(({ name }) => {
-          return this.apiService.searchPlaylistsByArtist(name);
-        }),
-      )
-    ).flat();
-
-    ret.forEach((playlist) => {
-      if (!uniqueIds.has(playlist.id)) {
-        uniqueIds.add(playlist.id);
-        playlists.push(playlist);
-      }
-    });
-
-    return playlists;
+    return await this.apiService.searchArtists(query);
   }
 
   /**
@@ -91,5 +75,14 @@ export class PlaylistsService {
    */
   async getTracksByPlaylistId(playlistId: string) {
     return await this.apiService.getTracksByPlaylistId(playlistId);
+  }
+
+  /**
+   * Get all or search playlists
+   * @param {number} artistId - artist id
+   * @return {TrackDto[]} tracks - array of tracks
+   */
+  async getTracksByArtistId(artistId: number) {
+    return await this.apiService.getTracksByArtist(artistId);
   }
 }

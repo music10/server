@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { YandexModule, YandexService } from '../yandex';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
 import { PlaylistsService } from './playlists.service';
@@ -25,9 +26,11 @@ describe('PlaylistsService', () => {
         PLAYLIST_MOCK,
         PLAYLIST_MOCK,
       ]);
-    jest
-      .spyOn(apiService, 'getArtistById')
-      .mockImplementation(async () => ({ id: 'artistId1', name: 'Eminem' }));
+    jest.spyOn(apiService, 'getArtistById').mockImplementation(async () => ({
+      id: 'artistId1',
+      name: 'Eminem',
+      cover: '',
+    }));
     jest
       .spyOn(apiService, 'getPlaylistById')
       .mockImplementation(async () => PLAYLIST_MOCK);
@@ -49,13 +52,13 @@ describe('PlaylistsService', () => {
     expect(randomPlaylist).toMatchObject(PLAYLIST_MOCK);
   });
 
-  it('should artist by id', async () => {
+  it('should get artist by id', async () => {
     await service.getArtist('artistId1');
     expect(apiService.getArtistById).toHaveBeenCalledTimes(1);
     expect(apiService.getArtistById).toHaveBeenCalledWith('artistId1');
   });
 
-  it('should playlist by id', async () => {
+  it('should get playlist by id', async () => {
     await service.getPlaylist('playlistId1');
     expect(apiService.getPlaylistById).toHaveBeenCalledTimes(1);
     expect(apiService.getPlaylistById).toHaveBeenCalledWith('playlistId1');

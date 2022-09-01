@@ -1,7 +1,9 @@
 /**
  * Example of playlists array
  */
-export const PLAYLISTS_MOCK = [
+import { PlaylistDto } from '../../src/dtos';
+
+export const PLAYLISTS_MOCK: PlaylistDto[] = [
   {
     id: '6536346784',
     cover: 'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',

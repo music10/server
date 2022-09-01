@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { YandexService } from './yandex.service';
 import { YandexHttpModule } from './yandexHttpModule';
 
-describe('SpotifyApiService', () => {
+describe('YandexApiService', () => {
   let service: YandexService;
 
   beforeEach(async () => {
@@ -65,36 +65,39 @@ describe('SpotifyApiService', () => {
   });
 
   it('should get playlist by id', async () => {
-    const result = await service.getPlaylistById('37i9dQZF1DXathzFlVFFpY');
+    const result = await service.getPlaylistById(
+      '901a037b-bfad-e30f-6325-6ebb49f412f3',
+    );
     expect(result).toStrictEqual({
-      cover: 'https://i.scdn.co/image/ab67706f000000034647a679d5cc388b5c58fa13',
-      id: '37i9dQZF1DXathzFlVFFpY',
-      name: 'Хиты русского рэпа',
+      cover:
+        'https://avatars.yandex.net/get-music-user-playlist/70586/103372440.2102.42432/200x200?1558344142432',
+      id: '901a037b-bfad-e30f-6325-6ebb49f412f3',
+      name: 'Русский хип-хоп 2000-х',
     });
   });
 
   it('should get tracks by playlist id', async () => {
     const result = await service.getTracksByPlaylistId(
-      '37i9dQZF1DXathzFlVFFpY',
+      '901a037b-bfad-e30f-6325-6ebb49f412f3',
     );
     expect(result.length).toBeGreaterThan(10);
     expect(result[0]).toStrictEqual({
-      album: 'Быль в глаза',
+      album: 'Громче воды, выше травы',
       artist: 'Каста',
-      id: '5NqhAFTgPTsxhm7kDhfVCw',
-      mp3: 'https://p.scdn.co/mp3-preview/8c6dca701a459b178b661aa655a488f200d4b18d?cid=6e32a60ae68b408596f337136300880c',
-      name: 'Вокруг Шум',
+      id: '597043',
+      mp3: '',
+      name: 'На порядок выше',
     });
   });
 
   it('should get track by id', async () => {
-    const result = await service.getTrackById('1xIDRR91yrYa3LvYWkOxxz');
+    const result = await service.getTrackById('597043');
     expect(result).toStrictEqual({
-      artist: 'Баста',
-      mp3: 'https://p.scdn.co/mp3-preview/0539e24facf10a93655f79ab48fe24a9370f56dc?cid=6e32a60ae68b408596f337136300880c',
-      id: '1xIDRR91yrYa3LvYWkOxxz',
-      name: 'Моя игра',
-      album: 'Баста 1',
+      artist: 'Каста',
+      mp3: '',
+      id: '597043',
+      name: 'На порядок выше',
+      album: 'Громче воды, выше травы',
     });
   });
 });

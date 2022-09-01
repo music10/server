@@ -5,7 +5,7 @@ export class ArtistDto {
   /**
    * Artist id
    */
-  id: number;
+  id: number | string;
 
   /**
    * Artist name

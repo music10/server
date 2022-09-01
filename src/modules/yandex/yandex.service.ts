@@ -17,6 +17,7 @@ export class YandexService {
 
   /**
    * Get playlists
+   * @deprecated
    */
   async getCherryPickPlaylists(): Promise<PlaylistDto[]> {
     return firstValueFrom(
@@ -46,7 +47,7 @@ export class YandexService {
         .map((playlist) => ({
           id: playlist.playlistUuid,
           name: playlist.title,
-          cover: 'https://' + playlist.cover.uri.replace('%%', '200x200'),
+          cover: 'https://' + playlist?.cover?.uri?.replace('%%', '200x200'),
         })),
     );
   }
@@ -57,6 +58,8 @@ export class YandexService {
    * @deprecated
    */
   async getFeaturedPlaylists(): Promise<PlaylistDto[]> {
+    return [];
+    // TODO
     return firstValueFrom(
       this.httpService.get(`/browse/featured-playlists`, {
         params: {
@@ -126,53 +129,13 @@ export class YandexService {
         },
       }),
     ).then(({ data }) =>
-      data.result.tracks.map((track) => ({
-        id: track.id,
-        name: track.title,
-        artist: track.artists.map((artist) => artist.name).join(', '),
-        album: track.albums.map((album) => album.title).join(', '),
+      data.result.tracks.map(({ albums, artists, id, title }) => ({
+        id,
+        name: title,
+        artist: artists.map(({ name }) => name).join(', '),
+        album: albums.map(({ title }) => title).join(', '),
         mp3: '',
       })),
-    );
-  }
-
-  /**
-   * Search playlists by artist via query-string
-   * @param {string} query
-   * @return {PlaylistDto[]} playlists
-   * @deprecated
-   */
-  async searchPlaylistsByArtist(query: string): Promise<PlaylistDto[]> {
-    return firstValueFrom(
-      this.httpService.get(`/search`, {
-        params: {
-          q: `This is ${query}`,
-          type: 'playlist',
-        },
-      }),
-    ).then(
-      async ({ data }) =>
-        await Promise.all(
-          data.playlists.items
-            // .filter(
-            //   ({ tracks, owner }) =>
-            //     tracks.total > 40 && owner.id === SPOTIFY_OWNER_ID,
-            // )
-            .map(async (playlist) => ({
-              ...playlist,
-              active:
-                (await this.getTracksByPlaylistId(playlist.id)).length >= 40,
-            })),
-        ).then((playlists) =>
-          playlists
-            .filter(({ active }) => active)
-            .slice(0, 20)
-            .map(({ id, name, images }) => ({
-              id,
-              name,
-              cover: images[0].url,
-            })),
-        ),
     );
   }
 
@@ -180,42 +143,31 @@ export class YandexService {
    * Get playlist by id
    * @param {string} playlistId - playlist id
    * @return {PlaylistDto} playlist
-   * @deprecated
    */
   async getPlaylistById(playlistId: string): Promise<PlaylistDto> {
-    return firstValueFrom(
-      this.httpService.get(`/playlists/${playlistId}`, {
-        params: {
-          fields: 'id,name,images,href',
-        },
+    return firstValueFrom(this.httpService.get(`/playlist/${playlistId}`)).then(
+      ({ data }) => ({
+        id: data.result.playlistUuid,
+        name: data.result.title,
+        cover: 'https://' + data.result?.cover?.uri?.replace('%%', '200x200'),
       }),
-    ).then(({ data }) => ({
-      id: data.id,
-      name: data.name,
-      cover: data.images[0].url,
-    }));
+    );
   }
 
   /**
    * Get artist by id
    * @param {string} artistId - playlist id
    * @return {ArtistDto} artist
-   * @deprecated
    */
   async getArtistById(artistId: string): Promise<ArtistDto> {
     return firstValueFrom(
       this.httpService.get(`/artists/${artistId}`, {
-        headers: {
-          'accept-language': 'en',
-        },
-        params: {
-          fields: 'id,name',
-        },
+        params: {},
       }),
     ).then(({ data }) => ({
-      name: data.name,
-      id: data.id,
-      cover: '',
+      id: data.result.artist.id,
+      name: data.result.artist.name,
+      cover: 'https://' + data.result.artist?.uri?.replace('%%', '200x200'),
     }));
   }
 
@@ -223,107 +175,34 @@ export class YandexService {
    * Get tracks by playlist id
    * @param {string} playlistId - playlist id
    * @return {TrackDto[]} tracks
-   * @deprecated
    */
   async getTracksByPlaylistId(playlistId: string): Promise<TrackDto[]> {
-    const tracks = [];
-    return new Promise<TrackDto[]>((resolve) => {
-      const responseHandler = ({ data }) => {
-        tracks.push(
-          ...data.items
-            .filter(({ track }) => track?.preview_url)
-            .map(({ track }) => ({
-              name: track.name,
-              id: track.id,
-              album: track.album.name,
-              artist: track.artists.map((artist) => artist.name).join(', '),
-              mp3: track.preview_url,
-            })),
-        );
-
-        if (data.next) {
-          firstValueFrom(this.httpService.get(data.next))
-            .then(responseHandler)
-            .catch(console.error);
-        } else {
-          resolve(tracks);
-        }
-      };
-
-      firstValueFrom(
-        this.httpService.get(`/playlists/${playlistId}/tracks`, {
-          params: {
-            fields:
-              'next,items(track(id,artists(name),name,preview_url,album(name)))',
-          },
-        }),
-      )
-        .then(responseHandler)
-        .catch(console.error);
-    });
-  }
-
-  /**
-   * @deprecated
-   * @param playlistId
-   */
-  async parsePlaylist(playlistId: string): Promise<any> {
-    const tracks = [];
-    return new Promise<any>((resolve) => {
-      const responseHandler = ({ data }) => {
-        tracks.push(
-          ...data.items
-            .filter(({ track }) => track?.preview_url)
-            .map(({ track }) => ({
-              name: track.name,
-              id: track.id,
-              album: track.album.name,
-              artist: track.artists.map((artist) => artist.name).join(', '),
-              mp3: track.preview_url,
-            })),
-        );
-
-        if (data.next) {
-          firstValueFrom(this.httpService.get(data.next))
-            .then(responseHandler)
-            .catch(console.error);
-        } else {
-          resolve({ total: data.total, tracks: tracks.length });
-        }
-      };
-
-      firstValueFrom(
-        this.httpService.get(`/playlists/${playlistId}/tracks`, {
-          params: {
-            fields:
-              'next,items(track(id,artists(name),name,preview_url,album(name))),total',
-          },
-        }),
-      )
-        .then(responseHandler)
-        .catch(console.error);
-    });
+    return firstValueFrom(this.httpService.get(`/playlist/${playlistId}`)).then(
+      ({ data }) =>
+        data.result.tracks.map(({ track: { albums, artists, id, title } }) => ({
+          id,
+          name: title,
+          artist: artists.map(({ name }) => name).join(', '),
+          album: albums.map(({ title }) => title).join(', '),
+          mp3: '',
+        })),
+    );
   }
 
   /**
    * Get track by id
    * @param {string} trackId
    * @return {TrackDto} track
-   * @deprecated
    */
   async getTrackById(trackId: string): Promise<TrackDto> {
-    return firstValueFrom(
-      this.httpService.get(`/tracks/${trackId}`, {
-        params: {
-          fields: 'id,name,artists(name),album(name),preview_url',
-        },
+    return firstValueFrom(this.httpService.get(`/tracks/${trackId}`)).then(
+      ({ data }) => ({
+        id: data.result?.[0]?.id,
+        name: data.result?.[0]?.title,
+        album: data.result?.[0]?.albums.map(({ title }) => title).join(', '),
+        artist: data.result?.[0]?.artists.map(({ name }) => name).join(', '),
+        mp3: '',
       }),
-    ).then(({ data }) => ({
-      id: data.id,
-      name: data.name,
-      album: data.album.name,
-      artist: data.artists.map((artist) => artist.name).join(', '),
-      mp3: data.preview_url,
-    }));
+    );
   }
 }
