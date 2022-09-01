@@ -11,7 +11,8 @@ import {
  * Application entrypoint
  */
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
+  app.enableCors({ allowedHeaders: '*', origin: '*' });
 
   const config = new DocumentBuilder()
     .setTitle('Musiq')
