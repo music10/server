@@ -50,6 +50,7 @@ export class YandexService {
           .map((playlist) => ({
             id: playlist.playlistUuid,
             name: playlist.title,
+            type: Type.playlist,
             cover: 'https://' + playlist?.cover?.uri?.replace('%%', '200x200'),
           }));
       }
@@ -59,6 +60,7 @@ export class YandexService {
           .map((artist) => ({
             id: artist.id,
             name: artist.name,
+            type: Type.artist,
             cover: 'https://' + artist?.cover?.uri?.replace('%%', '200x200'),
           }));
       }

@@ -28,5 +28,5 @@ export class PlaylistDto {
   /**
    * Tracks list
    */
-  tracks: TrackDto[];
+  tracks?: TrackDto[];
 }
