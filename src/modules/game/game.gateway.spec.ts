@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Socket } from 'socket.io';
 
 import { PlaylistsModule } from '../playlists';
-import { SpotifyModule } from '../spotify';
+import { YandexModule } from '../yandex';
 import { PlaylistsService } from '../playlists/playlists.service';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
 import { Game } from './entities/game.entity';
@@ -23,7 +23,7 @@ describe('GameGateway', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PlaylistsModule, SpotifyModule],
+      imports: [PlaylistsModule, YandexModule],
       providers: [GameGateway, GameService],
     }).compile();
 

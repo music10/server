@@ -1,22 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SpotifyService, SpotifyModule } from '../spotify';
+import { YandexService, YandexModule } from '../yandex';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
 import { ShareService } from './share.service';
 import { ShareController } from './share.controller';
 
 describe('ShareService', () => {
   let service: ShareService;
-  let apiService: SpotifyService;
+  let apiService: YandexService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SpotifyModule],
+      imports: [YandexModule],
       providers: [ShareService],
       controllers: [ShareController],
     }).compile();
 
     service = module.get<ShareService>(ShareService);
-    apiService = module.get<SpotifyService>(SpotifyService);
+    apiService = module.get<YandexService>(YandexService);
 
     jest
       .spyOn(apiService, 'getPlaylistById')

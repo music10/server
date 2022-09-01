@@ -34,6 +34,7 @@ export class SpotifyService {
       (value) => value,
       async (error: AxiosError) => {
         if (
+          // @ts-expect-error types
           error.response?.data?.error?.message === 'The access token expired'
         ) {
           return await firstValueFrom(
@@ -59,6 +60,7 @@ export class SpotifyService {
           return new Promise((resolve) =>
             setTimeout(
               () => resolve(this.httpService.axiosRef.request(error.config)),
+              // @ts-expect-error types
               error.response.headers['retry-after'] * 1000,
             ),
           );
@@ -167,6 +169,7 @@ export class SpotifyService {
       data.artists.items.slice(0, 10).map(({ id, name }) => ({
         id,
         name,
+        cover: '',
       })),
     );
   }
@@ -247,6 +250,7 @@ export class SpotifyService {
     ).then(({ data }) => ({
       name: data.name,
       id: data.id,
+      cover: '',
     }));
   }
 

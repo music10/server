@@ -57,6 +57,16 @@ export class PlaylistsController {
   }
 
   /**
+   * Get artist by ID
+   * @param {string} artistId
+   * @return {PlaylistDto[]} playlist
+   */
+  @Get('/artist/:id')
+  getArtist(@Param('id') artistId: string) {
+    return this.service.getArtist(artistId);
+  }
+
+  /**
    * Get all or search playlists
    * @param {string} playlistId - playlist id
    * @return {PlaylistDto[]} playlists - array of playlists
@@ -64,5 +74,15 @@ export class PlaylistsController {
   @Get('/:id/tracks')
   findTracksByPlaylistId(@Param('id') playlistId: string) {
     return this.service.getTracksByPlaylistId(playlistId);
+  }
+
+  /**
+   * Get all or search playlists
+   * @param {string} artistId - artist id
+   * @return {PlaylistDto[]} playlists - array of playlists
+   */
+  @Get('/artist/:id/tracks')
+  findTracksByArtistId(@Param('id') artistId: number) {
+    return this.service.getTracksByArtistId(artistId);
   }
 }
