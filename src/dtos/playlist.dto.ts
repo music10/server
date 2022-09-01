@@ -8,7 +8,7 @@ export class PlaylistDto {
   /**
    * Playlist id
    */
-  id: string | number;
+  id: string;
 
   /**
    * Playlist name
