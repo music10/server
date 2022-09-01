@@ -1,11 +1,14 @@
 /**
  * Playlist DTO
  */
+import { Type } from '../modules/yandex/yandex.types';
+import { TrackDto } from './track.dto';
+
 export class PlaylistDto {
   /**
    * Playlist id
    */
-  id: string;
+  id: string | number;
 
   /**
    * Playlist name
@@ -16,4 +19,14 @@ export class PlaylistDto {
    * URL of cover image
    */
   cover: string;
+
+  /**
+   * Type of playlist
+   */
+  type: Type;
+
+  /**
+   * Tracks list
+   */
+  tracks: TrackDto[];
 }

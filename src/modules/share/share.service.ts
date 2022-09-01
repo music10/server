@@ -68,7 +68,7 @@ import { YandexService } from '../yandex';
 //     });
 //     canvas.add(text);
 //
-//     // PlaylistDto is just green text so we are just cloning
+//     // PlaylistDto is just green text, so we are just cloning
 //     const playlistText = fabric.util.object.clone(text).set({
 //       text: name,
 //       top: 150,

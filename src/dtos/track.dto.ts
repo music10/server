@@ -25,5 +25,5 @@ export class TrackDto {
   /**
    * HTTP link to mp3 file
    */
-  mp3: string;
+  mp3?: string;
 }

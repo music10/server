@@ -1,10 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { YandexModule } from '../yandex';
-import {
-  PLAYLIST_MOCK,
-  PLAYLISTS_MOCK,
-  TRACKS_MOCK,
-} from '../../../__tests__/mocks';
+import { PLAYLIST_MOCK, PLAYLISTS_MOCK } from '../../../__tests__/mocks';
+import { Type } from '../yandex/yandex.types';
 import { PlaylistsController } from './playlists.controller';
 import { PlaylistsService } from './playlists.service';
 
@@ -32,12 +29,6 @@ describe('PlaylistsController', () => {
       .spyOn(service, 'searchPlaylists')
       .mockImplementation(async () => PLAYLISTS_MOCK);
     jest
-      .spyOn(service, 'searchPlaylistsByArtist')
-      .mockImplementation(async () => PLAYLISTS_MOCK);
-    jest
-      .spyOn(service, 'getTracksByPlaylistId')
-      .mockImplementation(async () => TRACKS_MOCK);
-    jest
       .spyOn(service, 'getPlaylist')
       .mockImplementation(async () => PLAYLIST_MOCK);
   });
@@ -59,26 +50,17 @@ describe('PlaylistsController', () => {
   });
 
   it('should get playlists with query', async () => {
-    await controller.getPlaylists('рус');
+    await controller.getPlaylists('рус', Type.playlist);
     expect(service.searchPlaylists).toHaveBeenCalledTimes(1);
-    expect(service.searchPlaylists).toHaveBeenCalledWith('рус');
-  });
-
-  it('should get playlists by artists', async () => {
-    await controller.getPlaylistsByArtist('eminem');
-    expect(service.searchPlaylistsByArtist).toHaveBeenCalledTimes(1);
-    expect(service.searchPlaylistsByArtist).toHaveBeenCalledWith('eminem');
+    expect(service.searchPlaylists).toHaveBeenCalledWith('рус', Type.playlist);
   });
 
   it('should get playlist', async () => {
-    await controller.getPlaylist('playlistId1');
+    await controller.getPlaylist(Type.playlist, 'playlistId1');
     expect(service.getPlaylist).toHaveBeenCalledTimes(1);
-    expect(service.getPlaylist).toHaveBeenCalledWith('playlistId1');
-  });
-
-  it('should find tracks by playlist id', async () => {
-    await controller.findTracksByPlaylistId('playlistId1');
-    expect(service.getTracksByPlaylistId).toHaveBeenCalledTimes(1);
-    expect(service.getTracksByPlaylistId).toHaveBeenCalledWith('playlistId1');
+    expect(service.getPlaylist).toHaveBeenCalledWith(
+      'playlistId1',
+      Type.playlist,
+    );
   });
 });

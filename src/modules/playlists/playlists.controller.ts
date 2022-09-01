@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Type } from '../yandex/yandex.types';
 import { PlaylistsService } from './playlists.service';
 
 /**
@@ -7,16 +8,6 @@ import { PlaylistsService } from './playlists.service';
 @Controller('playlists')
 export class PlaylistsController {
   constructor(private service: PlaylistsService) {}
-
-  /**
-   * Get all or search playlists
-   * @param {string} query - query string for search playlists
-   * @return {PlaylistDto[]} playlists - array of playlists
-   */
-  @Get()
-  async getPlaylists(@Query('query') query: string) {
-    return this.service.searchPlaylists(query);
-  }
 
   /**
    * Get cherry-pick playlists
@@ -37,52 +28,24 @@ export class PlaylistsController {
   }
 
   /**
-   * Get cherry-pick playlists
+   * Get all or search playlists
    * @param {string} query - query string for search playlists
+   * @param {Type} type - type of playlist
    * @return {PlaylistDto[]} playlists - array of playlists
    */
-  @Get('/artist')
-  async getPlaylistsByArtist(@Query('query') query: string) {
-    return this.service.searchPlaylistsByArtist(query);
+  @Get(':type')
+  async getPlaylists(@Query('query') query: string, @Param('type') type: Type) {
+    return this.service.searchPlaylists(query, type);
   }
 
   /**
    * Get playlist by ID
-   * @param {string} playlistId
+   * @param {string} type
+   * @param {Type} id
    * @return {PlaylistDto[]} playlist
    */
-  @Get('/:id')
-  getPlaylist(@Param('id') playlistId: string) {
-    return this.service.getPlaylist(playlistId);
-  }
-
-  /**
-   * Get artist by ID
-   * @param {string} artistId
-   * @return {PlaylistDto[]} playlist
-   */
-  @Get('/artist/:id')
-  getArtist(@Param('id') artistId: string) {
-    return this.service.getArtist(artistId);
-  }
-
-  /**
-   * Get all or search playlists
-   * @param {string} playlistId - playlist id
-   * @return {PlaylistDto[]} playlists - array of playlists
-   */
-  @Get('/:id/tracks')
-  findTracksByPlaylistId(@Param('id') playlistId: string) {
-    return this.service.getTracksByPlaylistId(playlistId);
-  }
-
-  /**
-   * Get all or search playlists
-   * @param {string} artistId - artist id
-   * @return {PlaylistDto[]} playlists - array of playlists
-   */
-  @Get('/artist/:id/tracks')
-  findTracksByArtistId(@Param('id') artistId: number) {
-    return this.service.getTracksByArtistId(artistId);
+  @Get(':type/:id')
+  getPlaylist(@Param('type') type: Type, @Param('id') id: string) {
+    return this.service.getPlaylist(id, type);
   }
 }
