@@ -35,7 +35,7 @@ npm start
 ```bash
 docker pull docker.pkg.github.com/music10/server/server:latest
 docker rm --force musiq
-docker run -p 5001:3001 -p 5000:3000 -d --name musiq --restart always docker.pkg.github.com/music10/server/server:latest
+docker run -p 3000:3000 -d --name musiq --restart always docker.pkg.github.com/music10/server/server:latest
 ```
 
 ### Example nginx config
