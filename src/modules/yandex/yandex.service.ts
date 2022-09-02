@@ -1,6 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+import { parseStringPromise } from 'xml2js';
+
 import { PlaylistDto, TrackDto } from '../../dtos';
 import { Type } from './yandex.types';
 
@@ -135,13 +137,36 @@ export class YandexService {
    * @param {string} trackId
    * @return {TrackDto} track
    */
-  async getTrackById(trackId: string): Promise<TrackDto> {
-    return firstValueFrom(this.httpService.get(`/tracks/${trackId}`)).then(
-      ({ data }) => ({
-        id: data.result?.[0]?.id,
-        name: data.result?.[0]?.title,
-        album: data.result?.[0]?.albums.map(({ title }) => title).join(', '),
-        artist: data.result?.[0]?.artists.map(({ name }) => name).join(', '),
+  async getTrackById(id: string): Promise<TrackDto> {
+    return firstValueFrom(this.httpService.get(`/tracks/${id}`)).then(
+      async ({ data }) => {
+        return {
+          id: data.result?.[0]?.id,
+          name: data.result?.[0]?.title,
+          album: data.result?.[0]?.albums.map(({ title }) => title).join(', '),
+          artist: data.result?.[0]?.artists.map(({ name }) => name).join(', '),
+          mp3: await this.getMp3ByTrackId(id),
+        };
+      },
+    );
+  }
+
+  async getMp3ByTrackId(id: string): Promise<any> {
+    return firstValueFrom(
+      this.httpService.get(`/tracks/${id}/download-info`),
+    ).then(({ data }) =>
+      firstValueFrom(
+        this.httpService.get(data.result?.[0].downloadInfoUrl, {
+          responseType: 'text',
+        }),
+      ).then(async (data) => {
+        const { host, sign, ts, path } = (
+          await parseStringPromise(data.data, {
+            trim: true,
+            explicitArray: false,
+          })
+        )?.['download-info'];
+        return `https://${host}/get-mp3/${sign}/${ts}${path}`;
       }),
     );
   }
