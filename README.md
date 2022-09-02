@@ -33,9 +33,9 @@ npm start
 ### Deploy
 
 ```bash
-docker pull docker.pkg.github.com/music10/server/server:latest
+docker pull docker.pkg.github.com/music10/server/server:develop
 docker rm --force musiq
-docker run -p 3000:3000 -d --name musiq --restart always docker.pkg.github.com/music10/server/server:latest
+docker run -p 3000:3000 -p 3001:3001 -d --name musiq --restart always docker.pkg.github.com/music10/server/server:develop
 ```
 
 ### Example nginx config
@@ -69,7 +69,7 @@ server {
             proxy_buffering off;
     }
 
-    listen [::]:80 ipv6only=on;
+    listen [::]:80;
     listen 80;
 }
 server {
@@ -81,14 +81,13 @@ server {
 
     location @server {
             proxy_pass http://127.0.0.1:3001;
+            proxy_http_verion 1.1;
             proxy_set_header Host $host;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_request_buffering off;
-            proxy_buffering off;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
     }
 
-    listen [::]:80 ipv6only=on;
+    listen [::]:80;
     listen 80;
 }
 ```
