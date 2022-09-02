@@ -1,14 +1,16 @@
-import { BadGatewayException } from '@nestjs/common';
+import { BadGatewayException, Inject } from '@nestjs/common';
 import { PlaylistDto, TrackDto } from '../../../dtos';
 import { randomSort } from '../../../utils';
 import { ChooseAnswerDto, ResultDto, TracksForUserDto } from '../dtos';
 import { HEADER_TEXT } from '../../share/variables';
+import { YandexService } from '../../yandex';
 import { Result } from './result.entity';
 
 /**
  * Class for game session
  */
 export class Game {
+  constructor(@Inject() private readonly yandexService: YandexService) {}
   /**
    * Result object
    */
@@ -69,9 +71,11 @@ export class Game {
 
     const wrongTracks = this.tracks.slice(0, 3);
     this.displayedTracks = randomSort([correctTrack, ...wrongTracks]);
+    const mp3 = await this.yandexService.getMp3ByTrackId(correctTrack.id);
+
     return {
-      tracks: this.displayedTracks.map(({ mp3, ...track }) => track),
-      mp3: this.correctTrack.mp3,
+      tracks: this.displayedTracks,
+      mp3,
     };
   }
 

@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 
 import { PlaylistsService } from '../playlists/playlists.service';
+import { YandexService } from '../yandex';
 import { GameService } from './game.service';
 
 /**
@@ -23,10 +24,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * GameGateway constructor
    * @param gameService
    * @param playlistsService
+   * @param yandexService
    */
   constructor(
     private readonly gameService: GameService,
     private readonly playlistsService: PlaylistsService,
+    private readonly yandexService: YandexService,
   ) {}
 
   /**
@@ -41,7 +44,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * @param socket
    */
   public handleConnection(socket: Socket) {
-    this.gameService.addClient(socket.id);
+    this.gameService.addClient(socket.id, this.yandexService);
   }
 
   /**

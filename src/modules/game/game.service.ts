@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { YandexService } from '../yandex';
 import { Game } from './entities/game.entity';
 
 /**
@@ -15,9 +16,10 @@ export class GameService {
   /**
    * Add new client to pool
    * @param clientId
+   * @param yandexService
    */
-  public addClient(clientId: string): void {
-    this.clients[clientId] = new Game();
+  public addClient(clientId: string, yandexService: YandexService): void {
+    this.clients[clientId] = new Game(yandexService);
   }
 
   /**
