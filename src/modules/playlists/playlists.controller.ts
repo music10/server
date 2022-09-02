@@ -35,7 +35,6 @@ export class PlaylistsController {
    */
   @Get(':type')
   async getPlaylists(@Query('query') query: string, @Param('type') type: Type) {
-    console.log(query, type);
     return this.service.searchPlaylists(query, type);
   }
 

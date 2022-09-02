@@ -6,7 +6,6 @@ import {
   OnGatewayDisconnect,
   OnGatewayConnection,
   WebSocketServer,
-  OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
@@ -26,9 +25,7 @@ import { GameService } from './game.service';
     origin: '*',
   },
 })
-export class GameGateway
-  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
-{
+export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * GameGateway constructor
    * @param gameService
@@ -48,15 +45,11 @@ export class GameGateway
   @WebSocketServer()
   private server: Server;
 
-  public afterInit(server) {
-    console.log(server);
-  }
   /**
    * Connection handler
    * @param socket
    */
   public handleConnection(socket: Socket) {
-    console.log('connect', socket.id);
     this.gameService.addClient(socket.id, this.yandexService);
   }
 
@@ -65,7 +58,6 @@ export class GameGateway
    * @param socket
    */
   public handleDisconnect(socket: Socket) {
-    console.log('disconnect', socket.id);
     this.gameService.removeClient(socket.id);
   }
 
