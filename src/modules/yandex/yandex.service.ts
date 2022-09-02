@@ -160,13 +160,13 @@ export class YandexService {
           responseType: 'text',
         }),
       ).then(async (data) => {
-        const { host, sign, ts, path } = (
+        const { host, s, ts, path } = (
           await parseStringPromise(data.data, {
             trim: true,
             explicitArray: false,
           })
         )?.['download-info'];
-        return `https://${host}/get-mp3/${sign}/${ts}${path}`;
+        return `https://${host}/get-mp3/${s}/${ts}${path}`;
       }),
     );
   }
