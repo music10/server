@@ -11,6 +11,7 @@ import { Server, Socket } from 'socket.io';
 
 import { PlaylistsService } from '../playlists/playlists.service';
 import { YandexService } from '../yandex';
+import { Type } from '../yandex/yandex.types';
 import { GameService } from './game.service';
 
 /**
@@ -64,14 +65,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * Set playlist
    * @param socket - client socket instance
-   * @param playlistId
+   * @param id
+   * @param type
    */
   @SubscribeMessage('setPlaylist')
   async setPlaylist(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() playlistId: string,
+    @MessageBody() id: string,
+    @MessageBody() type: Type,
   ) {
-    const playlist = await this.playlistsService.getPlaylist(playlistId);
+    console.log(id, type);
+    const playlist = await this.playlistsService.getPlaylist(id, type);
     socket.emit(
       'playlist',
       this.gameService
@@ -79,7 +83,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         .setPlaylist(
           playlist,
           async () =>
-            (await this.playlistsService.getPlaylist(playlistId)).tracks,
+            (await this.playlistsService.getPlaylist(id, type)).tracks,
         ),
     );
   }
