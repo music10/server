@@ -18,8 +18,9 @@ import { GameService } from './game.service';
  * @implements OnGatewayConnection
  * @implements OnGatewayDisconnect
  */
-@WebSocketGateway({
+@WebSocketGateway(3001, {
   namespace: 'game',
+  transports: ['websocket'],
   cors: {
     origin: '*',
   },
@@ -49,7 +50,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * @param socket
    */
   public handleConnection(socket: Socket) {
-    console.log('connect', socket.id);
     this.gameService.addClient(socket.id, this.yandexService);
   }
 
@@ -58,7 +58,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * @param socket
    */
   public handleDisconnect(socket: Socket) {
-    console.log('disconnect', socket.id);
     this.gameService.removeClient(socket.id);
   }
 
