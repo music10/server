@@ -1,16 +1,14 @@
-import { BadGatewayException, Inject } from '@nestjs/common';
+import { BadGatewayException } from '@nestjs/common';
 import { PlaylistDto, TrackDto } from '../../../dtos';
 import { randomSort } from '../../../utils';
 import { ChooseAnswerDto, ResultDto, TracksForUserDto } from '../dtos';
 import { HEADER_TEXT } from '../../share/variables';
-import { YandexService } from '../../yandex';
 import { Result } from './result.entity';
 
 /**
  * Class for game session
  */
 export class Game {
-  constructor(@Inject() private readonly yandexService: YandexService) {}
   /**
    * Result object
    */
@@ -40,6 +38,12 @@ export class Game {
   private getTracks: () => Promise<TrackDto[]>;
 
   /**
+   * Get link to mp3 file
+   * @private
+   */
+  private getMp3ByTrackId: (id: string) => Promise<string>;
+
+  /**
    * Tracks array for this game session
    * @private
    */
@@ -48,14 +52,17 @@ export class Game {
   /**
    * Set playlist for this game session
    * @param {PlaylistDto} playlist
-   * @param {Promise<TrackDto[]>} getTracks
+   * @param {() => Promise<TrackDto[]>} getTracks
+   * @param {(id: string) => Promise<string>} getMp3ByTrackId
    */
   setPlaylist(
     playlist: PlaylistDto,
     getTracks: () => Promise<TrackDto[]>,
+    getMp3ByTrackId: (id: string) => Promise<string>,
   ): PlaylistDto {
     this.playlist = playlist;
     this.getTracks = getTracks;
+    this.getMp3ByTrackId = getMp3ByTrackId;
     this.result = new Result();
     return playlist;
   }
@@ -71,7 +78,7 @@ export class Game {
 
     const wrongTracks = this.tracks.slice(0, 3);
     this.displayedTracks = randomSort([correctTrack, ...wrongTracks]);
-    const mp3 = await this.yandexService.getMp3ByTrackId(correctTrack.id);
+    const mp3 = await this.getMp3ByTrackId(correctTrack.id);
 
     return {
       tracks: this.displayedTracks,
