@@ -4,9 +4,18 @@ import { firstValueFrom } from 'rxjs';
 import { parseStringPromise } from 'xml2js';
 
 import { PlaylistDto, TrackDto } from '../../dtos';
+import { randomIntByMax } from '../../utils';
 import { Type } from './yandex.types';
 
+/**
+ * Page size for search
+ */
 const PAGE_SIZE = 20;
+
+/**
+ * Owner ID for random playlists
+ */
+const USER_ID_FOR_RANDOM = 'music-blog';
 
 /**
  * Service for Yandex.Music Api
@@ -53,7 +62,7 @@ export class YandexService {
             name: playlist.title,
             type: Type.playlist,
             cover: 'https://' + playlist?.cover?.uri?.replace('%%', '200x200'),
-            url: `https://music.yandex.ru/users/${playlist.owner.login}/playlists/${playlist.kind}`,
+            url: `https://music.yandex.ru/users/${playlist?.owner?.login}/playlists/${playlist.kind}`,
           }));
       }
       if (type === Type.artist) {
@@ -72,13 +81,22 @@ export class YandexService {
   }
 
   /**
-   * Search playlists by query-string
-   * @return {PlaylistDto[]} playlists
-   * @deprecated
+   * Get random playlist, pick from USER_ID playlists
+   * @return {PlaylistDto} playlists
    */
-  async getFeaturedPlaylists(): Promise<PlaylistDto[]> {
-    // TODO
-    return [];
+  async getRandomPlaylist(): Promise<PlaylistDto> {
+    return firstValueFrom(
+      this.httpService.get(`/users/${USER_ID_FOR_RANDOM}/playlists/list`, {}),
+    ).then(({ data }) => {
+      const playlist = data.result[randomIntByMax(data.result.length)];
+      return {
+        id: playlist?.playlistUuid,
+        name: playlist?.title,
+        cover: 'https://' + playlist?.cover?.uri?.replace('%%', '200x200'),
+        type: Type.playlist,
+        url: `https://music.yandex.ru/users/${playlist?.owner?.login}/playlists/${playlist.kind}`,
+      };
+    });
   }
 
   /**
@@ -110,7 +128,7 @@ export class YandexService {
           tracks: YandexService.parseTracks(
             data.result?.tracks.map(({ track }) => track),
           ),
-          url: `https://music.yandex.ru/users/${data.result.owner.login}/playlists/${data.result.kind}`,
+          url: `https://music.yandex.ru/users/${data.result.owner.login}/playlists/${data?.result?.kind}`,
         };
       }
       if (type === Type.artist) {

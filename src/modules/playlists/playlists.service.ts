@@ -24,20 +24,17 @@ export class PlaylistsService {
 
   /**
    * Get Random playlist from featured
-   * @return {PlaylistDto} playlists - playlists
+   * @return {PlaylistDto} playlist
    */
   async getRandomPlaylist() {
-    return [];
-    const playlists = await this.apiService.getFeaturedPlaylists();
-    const randomIndex = randomInt(playlists.length);
-    return playlists[randomIndex];
+    return this.apiService.getRandomPlaylist();
   }
 
   /**
    * Search playlists by query-string
    * @param {string} query - query-string
    * @param {Type} type - type of playlist
-   * @return {PlaylistDto[]} playlists - playlists
+   * @return {PlaylistDto[]} playlists
    */
   searchPlaylists(query: string, type: Type) {
     return this.apiService.searchPlaylists(query, type);

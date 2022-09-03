@@ -23,8 +23,14 @@ describe('YandexApiService', () => {
     expect(await service.getCherryPickPlaylists()).toMatchSnapshot();
   });
 
-  it.skip('should get featured playlists', async () => {
-    expect((await service.getFeaturedPlaylists()).length).toBeGreaterThan(1);
+  it('should get featured playlists', async () => {
+    expect(await service.getRandomPlaylist()).toStrictEqual({
+      id: expect.any(String),
+      name: expect.any(String),
+      cover: expect.any(String),
+      type: Type.playlist,
+      url: expect.any(String),
+    });
   });
 
   it('should search playlists', async () => {
