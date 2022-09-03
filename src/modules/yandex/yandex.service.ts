@@ -88,7 +88,11 @@ export class YandexService {
     return firstValueFrom(
       this.httpService.get(`/users/${USER_ID_FOR_RANDOM}/playlists/list`, {}),
     ).then(({ data }) => {
-      const playlist = data.result[randomIntByMax(data.result.length)];
+      const filteredPlaylists = data.result.filter(
+        (p) => p.revision && p.trackCount > 40,
+      );
+      const playlist =
+        filteredPlaylists[randomIntByMax(filteredPlaylists.length)];
       return {
         id: playlist?.playlistUuid,
         name: playlist?.title,
