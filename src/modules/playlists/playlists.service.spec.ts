@@ -36,7 +36,7 @@ describe('PlaylistsService', () => {
     expect(service).toBeDefined();
   });
 
-  it.skip('should get cherry pick playlists', async () => {
+  it('should get cherry pick playlists', async () => {
     await service.getCherryPickPlaylists();
     expect(apiService.getCherryPickPlaylists).toHaveBeenCalledTimes(1);
     expect(apiService.getCherryPickPlaylists).toHaveBeenCalledWith();

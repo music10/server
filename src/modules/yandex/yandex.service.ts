@@ -20,11 +20,10 @@ export class YandexService {
 
   /**
    * Get playlists
-   * @deprecated
    */
   async getCherryPickPlaylists(): Promise<PlaylistDto[]> {
     return firstValueFrom(
-      this.httpService.get('https://msq.app/cherry-pick.json'),
+      this.httpService.get('https://musiq.dergunov.net/cherry-pick.json'),
     ).then(({ data }) => data);
   }
 
