@@ -19,7 +19,7 @@ describe('YandexApiService', () => {
     expect(service).toBeDefined();
   });
 
-  it.skip('should get cherry pick playlists', async () => {
+  it('should get cherry pick playlists', async () => {
     expect(await service.getCherryPickPlaylists()).toMatchSnapshot();
   });
 
@@ -72,7 +72,6 @@ describe('YandexApiService', () => {
 
   it('should get track by id', async () => {
     const result = await service.getTrackById('597043');
-    console.log(result);
     expect(result).toStrictEqual({
       artist: 'Каста',
       id: '597043',

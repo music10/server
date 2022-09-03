@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`YandexApiService should get cherry pick playlists 1`] = `
+Array [
+  Object {
+    "cover": "https://musiq.dergunov.net/images/world.svg",
+    "id": "7d5ba0bc-729e-1dd8-2df7-5da309b17c16",
+    "name": "Мировые поп-хиты",
+    "type": "playlist",
+  },
+  Object {
+    "cover": "https://musiq.dergunov.net/images/russia.svg",
+    "id": "e3e7e09a-f0d3-056a-8108-31f0a27368e8",
+    "name": "Хиты русской поп-музыки",
+    "type": "playlist",
+  },
+  Object {
+    "cover": "https://musiq.dergunov.net/images/new.svg",
+    "id": "2111e2b6-587d-a600-2fea-54df7c314477",
+    "name": "Новинки месяца",
+    "type": "playlist",
+  },
+  Object {
+    "cover": "https://musiq.dergunov.net/images/tiktok.svg",
+    "id": "c8c03392-31ee-730c-a8a6-c24a5a30e911",
+    "name": "Топ тик-тока",
+    "type": "playlist",
+  },
+  Object {
+    "cover": "https://musiq.dergunov.net/images/hiphop.svg",
+    "id": "479652a7-a86f-6770-3cbd-e1e0ac9600f1",
+    "name": "Русский хип-хоп",
+    "type": "playlist",
+  },
+  Object {
+    "cover": "https://musiq.dergunov.net/images/rock.svg",
+    "id": "b0a55e85-65c6-ce15-1478-6c693d6c525c",
+    "name": "Вечный рок",
+    "type": "playlist",
+  },
+]
+`;

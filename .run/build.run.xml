@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build" type="js.build_tools.npm" nameIsGenerated="true">
+    <package-json value="$PROJECT_DIR$/../musiq/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="build" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs>
+      <env name="REACT_APP_AMPLITUDE_API_KEY" value="e9b6ebbee137e8acbb95a381e4748a11" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
