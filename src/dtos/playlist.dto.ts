@@ -26,6 +26,11 @@ export class PlaylistDto {
   type: Type;
 
   /**
+   * Url to web view
+   */
+  url?: string;
+
+  /**
    * Tracks list
    */
   tracks?: TrackDto[];

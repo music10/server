@@ -47,22 +47,24 @@ export class YandexService {
     ).then(({ data }) => {
       if (type === Type.playlist) {
         return data.result?.playlists?.results
-          .filter(({ trackCount }) => trackCount > 40)
+          .filter((p) => p.revision && p.trackCount > 40)
           .map((playlist) => ({
             id: playlist.playlistUuid,
             name: playlist.title,
             type: Type.playlist,
             cover: 'https://' + playlist?.cover?.uri?.replace('%%', '200x200'),
+            url: `https://music.yandex.ru/users/${playlist.owner.login}/playlists/${playlist.kind}`,
           }));
       }
       if (type === Type.artist) {
         return data.result?.artists?.results
-          .filter(({ counts }) => counts.tracks > 40)
+          .filter((p) => p.counts.tracks > 40)
           .map((artist) => ({
             id: artist.id,
             name: artist.name,
             type: Type.artist,
             cover: 'https://' + artist?.cover?.uri?.replace('%%', '200x200'),
+            url: `https://music.yandex.ru/artist/${artist.id}/tracks`,
           }));
       }
       return [];
@@ -108,6 +110,7 @@ export class YandexService {
           tracks: YandexService.parseTracks(
             data.result?.tracks.map(({ track }) => track),
           ),
+          url: `https://music.yandex.ru/users/${data.result.owner.login}/playlists/${data.result.kind}`,
         };
       }
       if (type === Type.artist) {
@@ -119,6 +122,7 @@ export class YandexService {
             data.result.artist?.cover?.uri?.replace('%%', '200x200'),
           type,
           tracks: await this.getTracksByArtist(id),
+          url: `https://music.yandex.ru/artist/${data.result.artist.id}/tracks`,
         };
       }
       return {
@@ -127,13 +131,14 @@ export class YandexService {
         cover: undefined,
         type,
         tracks: [],
+        url: '',
       };
     });
   }
 
   /**
    * Get track by id
-   * @param {string} trackId
+   * @param {string} id
    * @return {TrackDto} track
    */
   async getTrackById(id: string): Promise<TrackDto> {
@@ -172,11 +177,11 @@ export class YandexService {
 
   /**
    * Get tracks by artist id
-   * @param artistId
+   * @param id
    */
-  private async getTracksByArtist(artistId: string): Promise<TrackDto[]> {
+  private async getTracksByArtist(id: string): Promise<TrackDto[]> {
     return firstValueFrom(
-      this.httpService.get(`/artists/${artistId}/tracks`, {
+      this.httpService.get(`/artists/${id}/tracks`, {
         params: {
           page: 0,
           page_size: 1000,

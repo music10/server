@@ -35,6 +35,7 @@ describe('YandexApiService', () => {
           name: expect.any(String),
           cover: expect.any(String),
           type: Type.playlist,
+          url: expect.any(String),
         },
       ]),
     );
@@ -48,6 +49,7 @@ describe('YandexApiService', () => {
           name: expect.any(String),
           cover: expect.any(String),
           type: Type.artist,
+          url: expect.any(String),
         },
       ]),
     );
@@ -63,17 +65,25 @@ describe('YandexApiService', () => {
       id: '901a037b-bfad-e30f-6325-6ebb49f412f3',
       name: 'Русский хип-хоп 2000-х',
       type: 'playlist',
+      url: expect.any(String),
       tracks: expect.any(Array),
     });
   });
 
   it('should get track by id', async () => {
     const result = await service.getTrackById('597043');
+    console.log(result);
     expect(result).toStrictEqual({
       artist: 'Каста',
       id: '597043',
       name: 'На порядок выше',
       album: 'Громче воды, выше травы',
+      mp3: expect.any(String),
     });
+  });
+
+  it('should get mp3 track by id', async () => {
+    const result = await service.getMp3ByTrackId('597043');
+    expect(result).toBeDefined();
   });
 });

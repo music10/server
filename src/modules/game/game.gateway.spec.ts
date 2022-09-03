@@ -61,7 +61,7 @@ describe('GameGateway', () => {
   });
 
   it('should setPlaylist', async () => {
-    await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
+    await gateway.setPlaylist(MOCK_SOCKET, ['6536346784', Type.playlist]);
     expect(game.setPlaylist).toHaveBeenCalledTimes(1);
     expect(game.setPlaylist).toHaveBeenCalledWith(
       {
@@ -73,18 +73,19 @@ describe('GameGateway', () => {
         type: Type.playlist,
       },
       expect.any(Function),
+      expect.any(Function),
     );
   });
 
   it('should getNextTracks', async () => {
-    await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
+    await gateway.setPlaylist(MOCK_SOCKET, ['6536346784', Type.playlist]);
     await gateway.getNextTracks(MOCK_SOCKET);
     expect(game.next).toHaveBeenCalledTimes(1);
     expect(game.next).toHaveBeenCalledWith();
   });
 
   it('should choose', async () => {
-    await gateway.setPlaylist(MOCK_SOCKET, '6536346784');
+    await gateway.setPlaylist(MOCK_SOCKET, ['6536346784', Type.playlist]);
     await gateway.getNextTracks(MOCK_SOCKET);
     await gateway.chooseTrack(MOCK_SOCKET, 'trackId1');
     expect(game.choose).toHaveBeenCalledTimes(1);
