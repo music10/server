@@ -1,4 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { Type } from '../yandex/yandex.types';
 import { ShareService } from './share.service';
 
 /**
@@ -14,15 +15,17 @@ export class ShareController {
 
   /**
    * Get png for share
-   * @param playlist - playlist ID
+   * @param playlistId
+   * @param type
    * @param guess - number of guessed tracks
    * @return base64 encoded png image
    */
   @Get()
   async share(
-    @Query('playlistId') playlist: string,
+    @Query('playlistId') playlistId: string,
+    @Query('type') type: Type,
     @Query('guess') guess: number,
   ): Promise<string> {
-    return await this.shareService.generatePng(playlist, guess);
+    return await this.shareService.generatePng(playlistId, type, guess);
   }
 }

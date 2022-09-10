@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { YandexService } from '../yandex';
+import { Type } from '../yandex/yandex.types';
 import { Colors, HEADER_TEXT, LOGO_SVG, MAIN_TEXT, Sizes } from './variables';
 import { fabric } from './utils';
 
@@ -17,12 +18,20 @@ export class ShareService {
 
   /**
    * Generate png for share
+   * @param {string} type - type of playlist
    * @param {string} playlistId - playlist ID
    * @param {number} guess - number of guessed tracks
    * @return {string} base64 encoded png image
    */
-  async generatePng(playlistId: string, guess: number): Promise<string> {
-    const { name, cover } = await this.apiService.getPlaylistById(playlistId);
+  async generatePng(
+    playlistId: string,
+    type: Type,
+    guess: number,
+  ): Promise<string> {
+    const { name, cover } = await this.apiService.getPlaylistById(
+      playlistId,
+      type,
+    );
 
     fabric.nodeCanvas.registerFont(
       __dirname + '/assets/Montserrat-SemiBold.ttf',
