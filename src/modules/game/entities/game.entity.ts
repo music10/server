@@ -20,7 +20,7 @@ export class Game {
   displayedTracks: TrackDto[];
 
   /**
-   * Correct track id
+   * Correct track
    * @private
    */
   private correctTrack: TrackDto;
@@ -38,12 +38,6 @@ export class Game {
   private getTracks: () => Promise<TrackDto[]>;
 
   /**
-   * Get link to mp3 file
-   * @private
-   */
-  private getMp3ByTrackId: (id: string) => Promise<string>;
-
-  /**
    * Tracks array for this game session
    * @private
    */
@@ -51,18 +45,15 @@ export class Game {
 
   /**
    * Set playlist for this game session
-   * @param {PlaylistDto} playlist
-   * @param {() => Promise<TrackDto[]>} getTracks
-   * @param {(id: string) => Promise<string>} getMp3ByTrackId
+   * @param playlist playlist info
+   * @param getTracks function for get all playlist tracks
    */
   setPlaylist(
     playlist: PlaylistDto,
     getTracks: () => Promise<TrackDto[]>,
-    getMp3ByTrackId: (id: string) => Promise<string>,
   ): PlaylistDto {
     this.playlist = playlist;
     this.getTracks = getTracks;
-    this.getMp3ByTrackId = getMp3ByTrackId;
     this.result = new Result();
     return playlist;
   }
@@ -78,11 +69,10 @@ export class Game {
 
     const wrongTracks = this.tracks.slice(0, 3);
     this.displayedTracks = randomSort([correctTrack, ...wrongTracks]);
-    const mp3 = await this.getMp3ByTrackId(correctTrack.id);
 
     return {
       tracks: this.displayedTracks,
-      mp3,
+      mp3: correctTrack.mp3,
     };
   }
 
@@ -93,6 +83,23 @@ export class Game {
   choose(chooseTrackId: string): ChooseAnswerDto {
     this.result.updateProgress(chooseTrackId === this.correctTrack.id);
     return { correct: this.correctTrack.id };
+  }
+
+  /**
+   * 50-50 hint
+   * @param trackIds
+   */
+  hint50(trackIds: string[]): string[] {
+    return randomSort(
+      trackIds.filter((id) => id !== this.correctTrack.id),
+    ).slice(0, 2);
+  }
+
+  /**
+   * replay hint
+   */
+  async hintReplay(): Promise<string> {
+    return this.correctTrack.mp3;
   }
 
   /**

@@ -42,6 +42,8 @@ describe('GameGateway', () => {
     jest.spyOn(game, 'next').mockImplementation(() => void 0);
     jest.spyOn(game, 'getResult');
     jest.spyOn(game, 'choose').mockImplementation(() => void 0);
+    jest.spyOn(game, 'hint50').mockImplementation(() => void 0);
+    jest.spyOn(game, 'hintReplay').mockImplementation(() => void 0);
   });
 
   it('should be defined', () => {
@@ -73,7 +75,6 @@ describe('GameGateway', () => {
         type: Type.playlist,
       },
       expect.any(Function),
-      expect.any(Function),
     );
   });
 
@@ -90,6 +91,21 @@ describe('GameGateway', () => {
     await gateway.chooseTrack(MOCK_SOCKET, 'trackId1');
     expect(game.choose).toHaveBeenCalledTimes(1);
     expect(game.choose).toHaveBeenCalledWith('trackId1');
+  });
+
+  it('should hint 50-50', async () => {
+    await gateway.setPlaylist(MOCK_SOCKET, ['6536346784', Type.playlist]);
+    await gateway.getNextTracks(MOCK_SOCKET);
+    await gateway.hint50(MOCK_SOCKET, ['111', '222', '333', '444']);
+    expect(game.hint50).toHaveBeenCalledTimes(1);
+    expect(game.hint50).toHaveBeenCalledWith(['111', '222', '333', '444']);
+  });
+
+  it('should hint replay', async () => {
+    await gateway.setPlaylist(MOCK_SOCKET, ['6536346784', Type.playlist]);
+    await gateway.getNextTracks(MOCK_SOCKET);
+    await gateway.hintReplay(MOCK_SOCKET);
+    expect(game.hintReplay).toHaveBeenCalledTimes(1);
   });
 
   it('should get result', async () => {
