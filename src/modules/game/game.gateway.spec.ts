@@ -12,6 +12,7 @@ import { GameGateway } from './game.gateway';
 
 const MOCK_SOCKET: Socket = {
   id: '123456',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   emit(event: string | symbol, ...args: any[]): boolean {
     return true;
   },
