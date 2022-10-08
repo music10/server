@@ -75,6 +75,7 @@ describe('GameGateway', () => {
         type: Type.playlist,
       },
       expect.any(Function),
+      expect.any(Function),
     );
   });
 
