@@ -136,7 +136,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async hintReplay(@ConnectedSocket() socket: Socket) {
     socket.emit(
       'hint/replay/answer',
-      this.gameService.getClient(socket.id).hintReplay(),
+      await this.gameService.getClient(socket.id).hintReplay(),
     );
   }
 
