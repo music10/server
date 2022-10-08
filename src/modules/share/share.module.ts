@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { SpotifyModule } from '../spotify';
+import { YandexModule } from '../yandex';
 import { ShareService } from './share.service';
 import { ShareController } from './share.controller';
 
 @Module({
-  imports: [SpotifyModule],
+  imports: [YandexModule],
   providers: [ShareService],
   controllers: [ShareController],
 })

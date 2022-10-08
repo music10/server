@@ -12,12 +12,12 @@ import {
  */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({ allowedHeaders: '*', origin: '*' });
 
   const config = new DocumentBuilder()
     .setTitle('Musiq')
     .setDescription('API for Musiq')
-    .setVersion('1.3')
+    .setVersion('1.4')
     .build();
   const document = SwaggerModule.createDocument(app, config, {
     extraModels: [ChooseAnswerDto, ResultDto, TracksForUserDto],

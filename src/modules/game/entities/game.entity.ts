@@ -20,7 +20,7 @@ export class Game {
   displayedTracks: TrackDto[];
 
   /**
-   * Correct track id
+   * Correct track
    * @private
    */
   private correctTrack: TrackDto;
@@ -38,6 +38,12 @@ export class Game {
   private getTracks: () => Promise<TrackDto[]>;
 
   /**
+   * Get link to mp3 file
+   * @private
+   */
+  private getMp3ByTrackId: (id: string) => Promise<string>;
+
+  /**
    * Tracks array for this game session
    * @private
    */
@@ -45,15 +51,18 @@ export class Game {
 
   /**
    * Set playlist for this game session
-   * @param {PlaylistDto} playlist
-   * @param {Promise<TrackDto[]>} getTracks
+   * @param playlist playlist info
+   * @param getTracks function for get all playlist tracks
+   * @param getMp3ByTrackId http-link to mp3 file
    */
   setPlaylist(
     playlist: PlaylistDto,
     getTracks: () => Promise<TrackDto[]>,
+    getMp3ByTrackId: (id: string) => Promise<string>,
   ): PlaylistDto {
     this.playlist = playlist;
     this.getTracks = getTracks;
+    this.getMp3ByTrackId = getMp3ByTrackId;
     this.result = new Result();
     return playlist;
   }
@@ -69,9 +78,11 @@ export class Game {
 
     const wrongTracks = this.tracks.slice(0, 3);
     this.displayedTracks = randomSort([correctTrack, ...wrongTracks]);
+    const mp3 = await this.getMp3ByTrackId(correctTrack.id);
+
     return {
-      tracks: this.displayedTracks.map(({ mp3, ...track }) => track),
-      mp3: this.correctTrack.mp3,
+      tracks: this.displayedTracks,
+      mp3,
     };
   }
 
@@ -82,6 +93,23 @@ export class Game {
   choose(chooseTrackId: string): ChooseAnswerDto {
     this.result.updateProgress(chooseTrackId === this.correctTrack.id);
     return { correct: this.correctTrack.id };
+  }
+
+  /**
+   * 50-50 hint
+   * @param trackIds
+   */
+  hint50(trackIds: string[]): string[] {
+    return randomSort(
+      trackIds.filter((id) => id !== this.correctTrack.id),
+    ).slice(0, 2);
+  }
+
+  /**
+   * replay hint
+   */
+  async hintReplay(): Promise<string> {
+    return this.getMp3ByTrackId(this.correctTrack.id);
   }
 
   /**
@@ -97,7 +125,7 @@ export class Game {
   }
 
   /**
-   * Fill track list if less then 4 tracks
+   * Fill track list if less than 4 tracks
    * @private
    */
   private async fillTracks(): Promise<void> {

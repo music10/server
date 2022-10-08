@@ -14,12 +14,20 @@ describe('Game', () => {
   });
 
   it('Should set playlist', () => {
-    gameInstance.setPlaylist(PLAYLIST_MOCK, async () => TRACKS_MOCK);
+    gameInstance.setPlaylist(
+      PLAYLIST_MOCK,
+      async () => TRACKS_MOCK,
+      async () => 'https://example.com/file.mp3',
+    );
     expect(gameInstance.result).toBeDefined();
   });
 
   it('Should get next', async () => {
-    gameInstance.setPlaylist(PLAYLIST_MOCK, async () => TRACKS_MOCK);
+    gameInstance.setPlaylist(
+      PLAYLIST_MOCK,
+      async () => TRACKS_MOCK,
+      async () => 'https://example.com/file.mp3',
+    );
     const nextTracks = await gameInstance.next();
 
     expect(gameInstance.displayedTracks).toBeDefined();
@@ -31,11 +39,16 @@ describe('Game', () => {
       name: expect.any(String),
       artist: expect.any(String),
       album: expect.any(String),
+      mp3: expect.any(String),
     });
   });
 
   it('Should choose', async () => {
-    gameInstance.setPlaylist(PLAYLIST_MOCK, async () => TRACKS_MOCK);
+    gameInstance.setPlaylist(
+      PLAYLIST_MOCK,
+      async () => TRACKS_MOCK,
+      async () => 'https://example.com/file.mp3',
+    );
     await gameInstance.next();
     const result = gameInstance.choose('trackId3');
     expect(gameInstance.result.progress).toHaveLength(1);
@@ -45,5 +58,29 @@ describe('Game', () => {
     expect(result).toEqual({
       correct: gameInstance['correctTrack'].id,
     });
+  });
+
+  it('Should 50-50 hint', async () => {
+    gameInstance.setPlaylist(
+      PLAYLIST_MOCK,
+      async () => TRACKS_MOCK,
+      async () => 'https://example.com/file.mp3',
+    );
+    const tracks = await gameInstance.next();
+    const trackIds = tracks.tracks.map(({ id }) => id);
+    const result = gameInstance.hint50(trackIds);
+    expect(result).toHaveLength(2);
+    expect(trackIds).toEqual(expect.arrayContaining(result));
+  });
+
+  it('Should replay hint', async () => {
+    gameInstance.setPlaylist(
+      PLAYLIST_MOCK,
+      async () => TRACKS_MOCK,
+      async () => 'https://example.com/file.mp3',
+    );
+    const tracks = await gameInstance.next();
+    const result = await gameInstance.hintReplay();
+    expect(result).toBe(tracks.mp3);
   });
 });

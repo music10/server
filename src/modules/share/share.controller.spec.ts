@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SpotifyModule } from '../spotify';
+import { YandexModule } from '../yandex';
+import { Type } from '../yandex/yandex.types';
 import { ShareController } from './share.controller';
 import { ShareService } from './share.service';
 
@@ -9,7 +10,7 @@ describe('ShareController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SpotifyModule],
+      imports: [YandexModule],
       providers: [ShareService],
       controllers: [ShareController],
     }).compile();
@@ -27,8 +28,12 @@ describe('ShareController', () => {
   });
 
   it('should generate base64 png', () => {
-    controller.share('27f5HDjqkWIOxX7xA3T95p', 3);
+    controller.share('27f5HDjqkWIOxX7xA3T95p', Type.playlist, 3);
     expect(service.generatePng).toBeCalledTimes(1);
-    expect(service.generatePng).toBeCalledWith('27f5HDjqkWIOxX7xA3T95p', 3);
+    expect(service.generatePng).toBeCalledWith(
+      '27f5HDjqkWIOxX7xA3T95p',
+      Type.playlist,
+      3,
+    );
   });
 });

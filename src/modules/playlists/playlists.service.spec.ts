@@ -1,33 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SpotifyModule, SpotifyService } from '../spotify';
+
+import { YandexModule, YandexService } from '../yandex';
 import { PLAYLIST_MOCK } from '../../../__tests__/mocks';
+import { Type } from '../yandex/yandex.types';
 import { PlaylistsService } from './playlists.service';
 
 describe('PlaylistsService', () => {
   let service: PlaylistsService;
-  let apiService: SpotifyService;
+  let apiService: YandexService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SpotifyModule],
+      imports: [YandexModule],
       providers: [PlaylistsService],
     }).compile();
 
     service = module.get<PlaylistsService>(PlaylistsService);
-    apiService = module.get<SpotifyService>(SpotifyService);
+    apiService = module.get<YandexService>(YandexService);
 
     jest.spyOn(apiService, 'getCherryPickPlaylists');
     jest
-      .spyOn(apiService, 'getFeaturedPlaylists')
-      .mockImplementation(async () => [
-        PLAYLIST_MOCK,
-        PLAYLIST_MOCK,
-        PLAYLIST_MOCK,
-        PLAYLIST_MOCK,
-      ]);
-    jest
-      .spyOn(apiService, 'getArtistById')
-      .mockImplementation(async () => ({ id: 'artistId1', name: 'Eminem' }));
+      .spyOn(apiService, 'getRandomPlaylist')
+      .mockImplementation(async () => PLAYLIST_MOCK);
     jest
       .spyOn(apiService, 'getPlaylistById')
       .mockImplementation(async () => PLAYLIST_MOCK);
@@ -45,19 +39,16 @@ describe('PlaylistsService', () => {
 
   it('should get random playlist', async () => {
     const randomPlaylist = await service.getRandomPlaylist();
-    expect(apiService.getFeaturedPlaylists).toHaveBeenCalledTimes(1);
+    expect(apiService.getRandomPlaylist).toHaveBeenCalledTimes(1);
     expect(randomPlaylist).toMatchObject(PLAYLIST_MOCK);
   });
 
-  it('should artist by id', async () => {
-    await service.getArtist('artistId1');
-    expect(apiService.getArtistById).toHaveBeenCalledTimes(1);
-    expect(apiService.getArtistById).toHaveBeenCalledWith('artistId1');
-  });
-
-  it('should playlist by id', async () => {
+  it('should get playlist by id', async () => {
     await service.getPlaylist('playlistId1');
     expect(apiService.getPlaylistById).toHaveBeenCalledTimes(1);
-    expect(apiService.getPlaylistById).toHaveBeenCalledWith('playlistId1');
+    expect(apiService.getPlaylistById).toHaveBeenCalledWith(
+      'playlistId1',
+      Type.playlist,
+    );
   });
 });

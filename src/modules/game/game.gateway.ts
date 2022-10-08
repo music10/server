@@ -10,6 +10,8 @@ import {
 import { Server, Socket } from 'socket.io';
 
 import { PlaylistsService } from '../playlists/playlists.service';
+import { YandexService } from '../yandex';
+import { Type } from '../yandex/yandex.types';
 import { GameService } from './game.service';
 
 /**
@@ -17,16 +19,24 @@ import { GameService } from './game.service';
  * @implements OnGatewayConnection
  * @implements OnGatewayDisconnect
  */
-@WebSocketGateway(3001, { namespace: 'game' })
+@WebSocketGateway(3001, {
+  namespace: 'game',
+  transports: ['websocket'],
+  cors: {
+    origin: '*',
+  },
+})
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * GameGateway constructor
    * @param gameService
    * @param playlistsService
+   * @param yandexService
    */
   constructor(
     private readonly gameService: GameService,
     private readonly playlistsService: PlaylistsService,
+    private readonly yandexService: YandexService,
   ) {}
 
   /**
@@ -55,21 +65,22 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * Set playlist
    * @param socket - client socket instance
-   * @param playlistId
+   * @param id
+   * @param type
    */
   @SubscribeMessage('setPlaylist')
   async setPlaylist(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() playlistId: string,
+    @MessageBody() [id, type]: [string, Type],
   ) {
-    const playlist = await this.playlistsService.getPlaylist(playlistId);
+    const playlist = await this.playlistsService.getPlaylist(id, type);
     socket.emit(
       'playlist',
-      this.gameService
-        .getClient(socket.id)
-        .setPlaylist(playlist, () =>
-          this.playlistsService.getTracksByPlaylistId(playlistId),
-        ),
+      this.gameService.getClient(socket.id).setPlaylist(
+        playlist,
+        async () => (await this.playlistsService.getPlaylist(id, type)).tracks,
+        async (id) => await this.yandexService.getMp3ByTrackId(id),
+      ),
     );
   }
 
@@ -88,7 +99,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * Accept user choose
    * @param socket - client socket instance
-   * @param trackId
+   * @param trackId - choose track
    */
   @SubscribeMessage('choose')
   async chooseTrack(
@@ -98,6 +109,34 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     socket.emit(
       'chooseResult',
       await this.gameService.getClient(socket.id).choose(trackId),
+    );
+  }
+
+  /**
+   * 50-50 hint
+   * @param socket - client socket instance
+   * @param trackIds - current tracks id
+   */
+  @SubscribeMessage('hint/50-50')
+  async hint50(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() trackIds: string[],
+  ) {
+    socket.emit(
+      'hint/50-50/answer',
+      this.gameService.getClient(socket.id).hint50(trackIds),
+    );
+  }
+
+  /**
+   * replay hint
+   * @param socket - client socket instance
+   */
+  @SubscribeMessage('hint/replay')
+  async hintReplay(@ConnectedSocket() socket: Socket) {
+    socket.emit(
+      'hint/replay/answer',
+      await this.gameService.getClient(socket.id).hintReplay(),
     );
   }
 
